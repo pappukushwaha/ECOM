@@ -10,7 +10,7 @@
     <meta name="keywords" content="au theme template">
 
     <!-- Title Page-->
-    <title>Register</title>
+    <title>Register User</title>
 
     <!-- Fontfaces CSS-->
     <link href="{{asset('admin_login/css/font-face.css')}}" rel="stylesheet" media="all">

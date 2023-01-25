@@ -7,7 +7,7 @@
 <div class="col-md-12 mt-5">
     <!-- DATA TABLE-->
     <div class="table-responsive m-b-40">
-        <table class="table table-borderless table-data3">
+        <table class="table table-borderless table-data3 ">
             <thead>
                 <tr>
                     <th>Id</th>

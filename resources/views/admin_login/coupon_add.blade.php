@@ -4,6 +4,7 @@
 @section('content')
 <h1>Category Manage</h1>
 <h3 class="mt-3"><a href="coupon" class="btn btn-primary"><- Back</a></h3>
+
 <div class="col-lg-12 mt-3">
     <div class="card">
         <div class="card-body">

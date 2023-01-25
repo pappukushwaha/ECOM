@@ -4,11 +4,12 @@
 @section('content')
 <h1>Product Manage</h1>
 <h3 class="mt-3"><a href="product" class="btn btn-primary"><- Back</a></h3>
+<form action="{{route('product_insert')}}" method="post" enctype="multipart/form-data">
+    @csrf
 <div class="col-lg-12 mt-3">
     <div class="card">
         <div class="card-body">
-            <form action="{{route('product_insert')}}" method="post" enctype="multipart/form-data">
-                @csrf
+           
                 <div class="form-group">
                     <label for="name" class="control-label mb-1">Name</label>
                     <input id="name" name="name" type="text" value="{{old('name')}}" class="form-control" placeholder="name">
@@ -99,13 +100,111 @@
                     <p class="text-danger">{{$message}}</p>
                 @enderror
                 </div>
-                <div>
-                    <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
-                       Submit
-                    </button>
-                </div>
-            </form>
+               
         </div>
     </div>
 </div>
+
+<h1>Product Attribute Manage</h1>
+<div class="col-lg-12 mt-3" id="product_attr_box">
+    <div class="card" id="product_attr_1">
+        <div class="card-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="sku" class="control-label mb-1">SKU</label>
+                            <input id="name" name="sku[]" type="text" value="{{old('sku')}}" class="form-control" placeholder="sku">
+                            @error('sku')
+                                <p class="text-danger">{{$message}}</p>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="mrp" class="control-label mb-1">MRP</label>
+                            <input id="mrp" name="mrp" type="text" value="{{old('mrp')}}" class="form-control" placeholder="MRP">
+                            @error('mrp')
+                                <p class="text-danger">{{$message}}</p>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="price" class="control-label mb-1">Name</label>
+                            <input id="price" name="price" type="text" value="{{old('price')}}" class="form-control" placeholder="PRICE">
+                            @error('price')
+                                <p class="text-danger">{{$message}}</p>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <label for="size" class="control-label mb-1">Size</label>
+                            <select class="form-select form-control" name="size" aria-label="Default select example">
+                                <option value="">Select</option>
+                                @foreach ($size as $item)
+                                        <option value="{{$item->id}}">{{$item->size}}</option>
+                                @endforeach
+                            </select>
+                            @error('size')
+                                <p class="text-danger">{{$message}}</p>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <label for="color" class="control-label mb-1">Color</label>
+                            <select class="form-select form-control" name="color" aria-label="Default select example">
+                                <option value="">Select</option>
+                                @foreach ($color as $item)
+                                        <option value="{{$item->id}}">{{$item->color}}</option>
+                                @endforeach
+                            </select>
+                            @error('size')
+                                <p class="text-danger">{{$message}}</p>
+                            @enderror
+                        </div>
+                        <div class="col-md-2">
+                            <label for="qty" class="control-label mb-1">Name</label>
+                            <input id="qty" name="qty" type="text" value="{{old('qty')}}" class="form-control" placeholder="qty">
+                            @error('qty')
+                                <p class="text-danger">{{$message}}</p>
+                            @enderror
+                        </div>
+                        <div class="col-md-4">
+                            <label for="att_image" class="control-label mb-1">Name</label>
+                            <input id="att_image" name="att_image" type="file" value="{{old('att_image')}}" class="form-control" placeholder="Att Image">
+                            @error('att_image')
+                                <p class="text-danger">{{$message}}</p>
+                            @enderror
+                        </div>
+
+                        <div class="col-md-4 mt-4">
+                            <label for="att_image" class="control-label mb-1">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                            <button type="button" class="btn btn-success btn-lg" onclick="add_more()"> + Add</button>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+               
+               
+        </div>
+    </div>
+</div>
+<div >
+    <button id="payment-button" type="submit" class="btn btn-lg btn-info ">
+       Submit
+    </button>
+</div>
+</form>
+
+<script>
+    var loop_count = 1;
+    function add_more(){
+        loop_count++;
+       html = '<div class="card"id="product_attr_'+loop_count+'"><div class="card-body"><div class="form-group"><div class="row">';
+       html += '<div class="col-md-4 mt-4"><label for="att_image" class="control-label mb-1">&nbsp;&nbsp;&nbsp;&nbsp;</label><button type="button" class="btn btn-danger btn-lg" onclick=remove_more("'+loop_count+'")> + Add</button></div>'
+       html +='</div></div></div></div>'; 
+
+        jQuery('#product_attr_box').append(html);
+    }
+    function remove_more(loop_count){
+        jQuery('#product_attr_'+loop_count).remove();
+    }
+</script>
 @stop

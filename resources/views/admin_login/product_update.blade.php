@@ -51,7 +51,18 @@
                 </div>
                 <div class="form-group">
                     <label for="brand" class="control-label mb-1">Brand</label>
-                    <input id="brand" name="brand" type="text" value="{{$data->brand}}"  class="form-control" placeholder="Brand">
+                    {{-- <input id="brand" name="brand" type="text" value="{{$data->brand}}"  class="form-control" placeholder="Brand"> --}}
+                    <select class="form-select form-control" id="brand" name="brand" aria-label="Default select example">
+                        <option value="">Select Brand</option>
+                        @foreach ($brand as $item)
+                        @if ($data->brand == $item->id)
+                        <option selected value="{{$item->id}}">  
+                        @else
+                        <option value="{{$item->id}}"> 
+                        @endif
+                        {{$item->brand}}</option> 
+                        @endforeach
+                      </select>
                     @error('brand')
                     <p class="text-danger">{{$message}}</p>
                 @enderror

@@ -15,6 +15,7 @@ class ProductController extends Controller
       }
       public function product_add(){
         $users['data'] = DB::select('select * from categories where status = 1');
+        $users['brand'] = DB::select('select * from brands where status = 1');
         $users['size'] = DB::select('select * from sizes where status = 1');
         $users['color'] = DB::select('select * from colores where status = 1');
         return view('admin_login/product_add', $users);
@@ -150,6 +151,7 @@ class ProductController extends Controller
        public function update($id){
         $result['data']=Product::find($id);
         $result['category'] = DB::select('select * from categories where status = 1');
+        $result['brand'] = DB::select('select * from brands where status = 1');
         $result['size'] = DB::select('select * from sizes where status = 1');
         $result['color'] = DB::select('select * from colores where status = 1');
         $result['product_attr'] = DB::select('select * from product_attr where product_id = '.$id);

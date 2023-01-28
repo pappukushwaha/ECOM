@@ -52,8 +52,13 @@
                         </div>
                         <div class="col-md-4">
                             <label for="brand" class="control-label mb-1">Brand</label>
-                            <input id="brand" name="brand" type="text" value="{{old('brand')}}"  class="form-control" placeholder="Brand">
-                            @error('brand')
+                            <select class="form-select form-control" name="brand" aria-label="Default select example" required>
+                                <option value="">Select</option>
+                                @foreach ($brand as $item)
+                                <option value="{{$item->id}}">{{$item->brand}}</option>
+                                @endforeach
+                            </select>
+                              @error('brand')
                             <p class="text-danger">{{$message}}</p>
                         @enderror
                         </div>

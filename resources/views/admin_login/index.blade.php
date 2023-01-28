@@ -77,11 +77,14 @@
                             <a href="{{url('color')}}">
                                 <i class="fas fa-paint-brush"></i>Color</a>
                         </li>
+                        <li class="@yield('brand_selected')">
+                            <a href="{{url('brand')}}">
+                                <i class="fa fa-snowflake-o"></i>Brand</a>
+                        </li>
                         <li class="@yield('product_selected')">
                             <a href="{{url('product')}}">
                                 <i class="fas fa-shopping-basket"></i>Product</a>
                         </li>
-                        
                     </ul>
                 </div>
             </nav>
@@ -118,10 +121,15 @@
                                 <a href="{{url('color')}}">
                                     <i class="fas fa-paint-brush"></i>Color</a>
                             </li>
+                            <li class="@yield('brand_selected')">
+                                <a href="{{url('brand')}}">
+                                    <i class="fa fa-snowflake-o"></i>Brand</a>
+                            </li>
                             <li class="@yield('product_selected')">
                                 <a href="{{url('product')}}">
                                     <i class="fas fa-shopping-basket"></i>Product</a>
                             </li>
+                           
                         </ul>
                     </ul>
                 </nav>

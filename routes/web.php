@@ -82,6 +82,8 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::post('product_updatedata/{id}', [ProductController::class, 'updatedata']);
     Route::get('product_delete/{id}', [ProductController::class, 'delete']);
     Route::get('status_update_product/{status}/{id}', [ProductController::class, 'status']);
+    Route::get('product_attr_delete/{pattr}/{pid}', [ProductController::class, 'deleteattr']);
+    Route::get('product_image_delete/{piid}/{pid}', [ProductController::class, 'deleteimg']);
 
 });
 

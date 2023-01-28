@@ -19,7 +19,10 @@ class ProductController extends Controller
         $users['color'] = DB::select('select * from colores where status = 1');
         return view('admin_login/product_add', $users);
       }
-       public function insert(Request $request){
+       public function insert(Request $request){       
+        // echo "<pre>";
+        // print_r($request->post());
+        // die();
         $model = new Product();
 
           $request->validate([
@@ -35,8 +38,26 @@ class ProductController extends Controller
             'technical_specification'=>'required',
             'uses'=>'required',
             'warranty'=>'required',
+            'sku' => 'required|unique:product_attr',
           ]);
+
+         
+
+        
+          // $skuArr = $request->post('sku');
+          // foreach ($skuArr as $key => $value) {
+          //   $check = DB::table('product_attr')->
+          //   where('sku', '=',$skuArr[$key])->
+          //   get();
+          //   if(isset($check[0])){
+          //     $request->session()->flash('sku_error', $skuArr[$key].'Sku already used');
+          //     return redirect(request()->headers->get('referer'));
+          //   }
+          // }
+          
+
           if($request->hasfile('image')){
+            
             $image=$request->file('image');
             $ext=$image->extension();
             $image_name = time().'.'.$ext;
@@ -44,6 +65,8 @@ class ProductController extends Controller
            $model->image = $image_name;
 
           }
+        
+
           $model->name = $request->post('name');
           $model->slug = $request->post('slug');
           $model->category_id = $request->post('category');
@@ -57,6 +80,66 @@ class ProductController extends Controller
           $model->warranty = $request->post('warranty');
           $model->status = 1;
           if($model->save()){
+           $pid = $model->id;
+           
+
+              /*product attribute start*/
+          $skuArr = $request->post('sku');
+          $mrpArr = $request->post('mrp');
+          $priceArr = $request->post('price');
+          $qtyArr = $request->post('qty');
+          $size_idArr = $request->post('size_id');
+          $color_idArr = $request->post('color_id');
+          foreach ($skuArr as $key => $value) {
+            $productAttArr['product_id'] = $pid;
+            $productAttArr['sku'] =$skuArr[$key];
+            $productAttArr['mrp'] =$mrpArr[$key];
+            $productAttArr['price'] =$priceArr[$key];
+            $productAttArr['qty'] =$qtyArr[$key];
+            if($size_idArr[$key] == ''){
+              $productAttArr['size_id'] =0;
+            }else{
+            $productAttArr['size_id'] =$size_idArr[$key];
+            }
+            if ($color_idArr[$key] == '') {
+              $productAttArr['color_id'] =0;
+            }else{
+            $productAttArr['color_id'] =$color_idArr[$key];
+            }
+
+            if ($request->hasFile("att_image.$key")) {
+              $rand = rand('11111111','99999999');
+              $att_image = $request->file("att_image.$key");
+              $ext=$att_image->extension();
+              $att_image_name = $rand.'.'.$ext;
+              $request->file("att_image.$key")->storeAs('/public/media',$att_image_name);
+              $productAttArr['att_image']=$att_image_name;
+            }
+
+            DB::table('product_attr')->insert($productAttArr);
+          }
+          /*product attribute end*/
+
+
+          /*product images start*/
+
+          $piid = $request->post('piid');
+          foreach ($piid as $key => $value) {
+            if ($request->hasFile("product_image.$key")) {
+              $rand = rand('11111111','99999999');
+              $att_image = $request->file("product_image.$key");
+              $ext=$att_image->extension();
+              $att_image_name = $rand.'.'.$ext;
+              $request->file("product_image.$key")->storeAs('/public/media',$att_image_name);
+              $productImgArr['product_image']=$att_image_name;
+              
+            }
+            $productImgArr['product_id'] = $pid;
+            DB::table('product_images')->insert($productImgArr);
+          }
+
+
+          /*product images end*/
             return redirect('/product');
           }else{
             return redirect('/product_add');
@@ -69,6 +152,8 @@ class ProductController extends Controller
         $result['category'] = DB::select('select * from categories where status = 1');
         $result['size'] = DB::select('select * from sizes where status = 1');
         $result['color'] = DB::select('select * from colores where status = 1');
+        $result['product_attr'] = DB::select('select * from product_attr where product_id = '.$id);
+        $result['product_images'] = DB::select('select * from product_images where product_id = '.$id);
 
         return view('admin_login/product_update', $result);
        }
@@ -77,9 +162,23 @@ class ProductController extends Controller
            $delete = Product::find($id)->delete();
            return redirect('/product');
        }
-       public function updatedata(Request $request, $id){
-        $model = Product::find($id);
 
+       public function deleteattr($pattr, $pid){
+        DB::delete('delete from product_attr where id = '.$pattr);
+        return redirect('/product_update/'.$pid);
+    }
+
+    public function deleteimg($piid, $pid){
+      DB::delete('delete from product_images where id = '.$piid);
+      return redirect('/product_update/'.$pid);
+  }
+    
+       
+       public function updatedata(Request $request, $id){
+        // echo "<pre>";
+        // print_r($request->all());
+        // die();
+        $model = Product::find($id);
         $request->validate([
             'name'=>'required',
             'slug'=>'required|unique:Products,slug,'.$id,
@@ -114,6 +213,71 @@ class ProductController extends Controller
           $model->uses = $request->post('uses');
           $model->warranty = $request->post('warranty');
           if($model->save()){
+            $pid = $model->id;
+            $paidArr = $request->post('paid');
+            $skuArr = $request->post('sku');
+          $mrpArr = $request->post('mrp');
+          $priceArr = $request->post('price');
+          $qtyArr = $request->post('qty');
+          $size_idArr = $request->post('size_id');
+          $color_idArr = $request->post('color_id');
+          foreach ($skuArr as $key => $value) {
+            $productAttArr['product_id'] = $pid;
+            $productAttArr['sku'] =$skuArr[$key];
+            $productAttArr['mrp'] =$mrpArr[$key];
+            $productAttArr['price'] =$priceArr[$key];
+            $productAttArr['qty'] =$qtyArr[$key];
+            $productAttArr['size_id'] =$size_idArr[$key];
+            $productAttArr['color_id'] =$color_idArr[$key];
+            
+            if ($paidArr[$key] != '') {
+              if ($request->hasFile("att_image.$key")) {
+                $rand = rand('11111111','99999999');
+                $att_image = $request->file("att_image.$key");
+                $ext=$att_image->extension();
+                $att_image_name = $rand.'.'.$ext;
+                $request->file("att_image.$key")->storeAs('/public/media',$att_image_name);
+                $productAttArr['att_image']=$att_image_name;
+                DB::table('product_attr')->where(['id'=>$paidArr[$key]])->update($productAttArr);
+              }
+             }else{
+              if ($request->hasFile("att_image.$key")) {
+                $rand = rand('11111111','99999999');
+                $att_image = $request->file("att_image.$key");
+                $ext=$att_image->extension();
+                $att_image_name = $rand.'.'.$ext;
+                $request->file("att_image.$key")->storeAs('/public/media',$att_image_name);
+                $productAttArr['att_image']=$att_image_name;
+              DB::table('product_attr')->insert($productAttArr);
+             }
+            }
+          }
+          $piid = $request->post('piid');
+          foreach ($piid as $key => $value) {
+          if ($piid[$key] != '') {
+            $productImgArr['product_id'] = $pid;
+            if ($request->hasFile("product_image.$key")) {
+              $rand = rand('11111111','99999999');
+              $att_image = $request->file("product_image.$key");
+              $ext=$att_image->extension();
+              $att_image_name = $rand.'.'.$ext;
+              $request->file("product_image.$key")->storeAs('/public/media',$att_image_name);
+              $productImgArr['product_image']=$att_image_name;
+              DB::table('product_images')->where(['id'=>$piid[$key]])->update($productImgArr);
+            }
+           }else{
+            if ($request->hasFile("product_image.$key")) {
+              $rand = rand('11111111','99999999');
+              $att_image = $request->file("product_image.$key");
+              $ext=$att_image->extension();
+              $att_image_name = $rand.'.'.$ext;
+              $request->file("product_image.$key")->storeAs('/public/media',$att_image_name);
+              $productImgArr['product_image']=$att_image_name;
+            DB::table('product_images')->insert($productImgArr);
+           }
+          }
+          }
+
             return redirect('/product');
           }else{
             return redirect('/product_add');

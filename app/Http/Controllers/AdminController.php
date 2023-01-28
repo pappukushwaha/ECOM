@@ -20,7 +20,7 @@ class AdminController extends Controller
    if($result){
       if (Hash::check($pass, $result->password)) {
       $res->session()->put('ADMIN_ID', $result->id);
-      return redirect('index');
+      return redirect('dashboard');
      }else{
       $res->session()->flash('error', 'Do not Match Email and hash Password');
       return redirect('admin');

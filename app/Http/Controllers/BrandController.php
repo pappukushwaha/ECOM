@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Storage;
 
 class BrandController extends Controller
 {
@@ -44,6 +46,9 @@ class BrandController extends Controller
    }
 
    public function delete($id){
+    $arrImg = DB::table('brands')->where('id','=',$id)->get();
+       $imgPath = $arrImg[0]->brand_img;
+       Storage::delete('public/media/'.$imgPath);
        $delete = Brand::find($id)->delete();
        return redirect('/brand');
    }

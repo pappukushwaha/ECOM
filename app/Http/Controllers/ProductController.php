@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Storage;
 
 class ProductController extends Controller
 {
@@ -168,6 +169,20 @@ class ProductController extends Controller
        }
     
        public function delete($id){
+          $arrImg = DB::table('Products')->where('id','=',$id)->get();
+          $arrImgs = DB::table('product_images')->where('product_id','=',$id)->get();
+          $arrImgatt = DB::table('product_attr')->where('product_id','=',$id)->get();
+           $imgPath = $arrImg[0]->image;
+           $imgPaths = $arrImgs;
+
+           for ($i=0; $i < count($arrImgatt); $i++) { 
+            Storage::delete('public/media/'.$arrImgatt[$i]->att_image);
+            }
+
+            for ($i=0; $i < count($imgPaths); $i++) { 
+            Storage::delete('public/media/'.$imgPaths[$i]->product_image);
+            }
+          Storage::delete('public/media/'.$imgPath);
            $delete = Product::find($id)->delete();
            return redirect('/product');
        }

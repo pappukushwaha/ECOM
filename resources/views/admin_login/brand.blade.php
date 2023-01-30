@@ -21,7 +21,7 @@
                 <tr>
                     <td>{{$item->id}}</td>
                     <td>{{$item->brand}}</td>
-                    <td>{{$item->brand_image}}</td>
+                    <td> <a href="{{asset('storage/media/')}}/{{$item->brand_img}}" target="_blank" ><img src="{{asset('storage/media/')}}/{{$item->brand_img}}" width="100px" height="100px" style="border-radius: 50%" alt=""></a> </td>
                     <td><a href="{{url('brand_update')}}/{{$item->id}}" class="btn btn-success">Edit</a> 
                     @if ($item->status == 0)
                     <a href="{{url('status_update_brand/1')}}/{{$item->id}}" class="btn btn-primary">Active</a> 

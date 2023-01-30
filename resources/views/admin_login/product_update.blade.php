@@ -116,6 +116,92 @@
                     <p class="text-danger">{{$message}}</p>
                 @enderror
                 </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 mt-2">
+                            <label for="leed_time" class="control-label mb-1">Leed Time</label>
+                            <input id="leed_time" name="leed_time" type="text" value="{{$data->leed_time}}"  class="form-control" placeholder="Leed Time" >
+                            @error('leed_time')
+                            <p class="text-danger">{{$message}}</p>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mt-2">
+                            <label for="tax_desc" class="control-label mb-1">Tax</label>
+                            <select class="form-select form-control" id="tax_desc" name="tax_desc" aria-label="Default select example">
+                                <option value="">Select</option>
+                                @foreach ($tax as $item)
+                                @if ($data->tax_id == $item->id)
+                                <option selected value="{{$item->id}}">  
+                                @else
+                                <option value="{{$item->id}}"> 
+                                @endif
+                                {{$item->tax_desc}}</option> 
+                                @endforeach
+                              </select>
+                            @error('brand')
+                            <p class="text-danger">{{$message}}</p>
+                        @enderror
+                        </div>
+                      
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3 mt-2">
+                            <label for="is_promo" class="control-label mb-1">Is Promo</label>
+                            <select class="form-select form-control" name="is_promo" aria-label="Default select example" required>
+                                @if ($data->is_promo == 1)
+                                <option selected value="1">Yes</option>
+                                <option  value="0">No</option>
+                                @else
+                                <option  value="1">Yes</option>
+                                <option selected value="0">No</option>
+                                @endif
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+                            <label for="is_featured" class="control-label mb-1">Is Featured</label>
+                            <select class="form-select form-control" name="is_featured" aria-label="Default select example" required>
+                                @if ($data->is_featured == 1)
+                                <option selected value="1">Yes</option>
+                                <option  value="0">No</option>
+                                @else
+                                <option  value="1">Yes</option>
+                                <option selected value="0">No</option>
+                                @endif
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+                            <label for="is_descounted" class="control-label mb-1">Is Descounted</label>
+                            <select class="form-select form-control" name="is_descounted" aria-label="Default select example" required>
+                                @if ($data->is_descounted == 1)
+                                <option selected value="1">Yes</option>
+                                <option  value="0">No</option>
+                                @else
+                                <option  value="1">Yes</option>
+                                <option selected value="0">No</option>
+                                @endif
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+                            <label for="is_trending" class="control-label mb-1">Is Trending</label>
+                            <select class="form-select form-control" name="is_trending" aria-label="Default select example" required>
+                                @if ($data->is_trending == 1)
+                                <option selected value="1">Yes</option>
+                                <option  value="0">No</option>
+                                @else
+                                <option  value="1">Yes</option>
+                                <option selected value="0">No</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                </div> 
+
             </div>
         </div> 
     </div>

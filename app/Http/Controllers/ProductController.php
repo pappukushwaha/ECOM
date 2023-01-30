@@ -18,6 +18,7 @@ class ProductController extends Controller
         $users['brand'] = DB::select('select * from brands where status = 1');
         $users['size'] = DB::select('select * from sizes where status = 1');
         $users['color'] = DB::select('select * from colores where status = 1');
+        $users['tax'] = DB::select('select * from taxs where status = 1');
         return view('admin_login/product_add', $users);
       }
        public function insert(Request $request){       
@@ -79,6 +80,12 @@ class ProductController extends Controller
           $model->technical_specification = $request->post('technical_specification');
           $model->uses = $request->post('uses');
           $model->warranty = $request->post('warranty');
+          $model->leed_time = $request->post('leed_time');
+          $model->tax_id = $request->post('tax_desc');
+          $model->is_promo = $request->post('is_promo');
+          $model->is_featured = $request->post('is_featured');
+          $model->is_descounted = $request->post('is_descounted');
+          $model->is_trending = $request->post('is_trending');
           $model->status = 1;
           if($model->save()){
            $pid = $model->id;
@@ -156,7 +163,7 @@ class ProductController extends Controller
         $result['color'] = DB::select('select * from colores where status = 1');
         $result['product_attr'] = DB::select('select * from product_attr where product_id = '.$id);
         $result['product_images'] = DB::select('select * from product_images where product_id = '.$id);
-
+        $result['tax'] = DB::select('select * from taxs where status = 1');
         return view('admin_login/product_update', $result);
        }
     
@@ -214,6 +221,12 @@ class ProductController extends Controller
           $model->technical_specification = $request->post('technical_specification');
           $model->uses = $request->post('uses');
           $model->warranty = $request->post('warranty');
+          $model->leed_time = $request->post('leed_time');
+          $model->tax_id = $request->post('tax_desc');
+          $model->is_promo = $request->post('is_promo');
+          $model->is_featured = $request->post('is_featured');
+          $model->is_descounted = $request->post('is_descounted');
+          $model->is_trending = $request->post('is_trending');
           if($model->save()){
             $pid = $model->id;
             $paidArr = $request->post('paid');

@@ -18,13 +18,17 @@ class CouponControll extends Controller
        public function insert(Request $request){
           $request->validate([
             'coupon_tittle'=>'required',
-            'coupon_value'=>'required',
+            'coupon_value'=>'required|numeric',
+            'min_order_amount'=>'numeric',
             'coupon_code'=>'required|unique:coupons',
           ]);
           $model = new Coupons();
           $model->coupon_tittle = $request->post('coupon_tittle');
           $model->coupon_code = $request->post('coupon_code');
           $model->coupon_value = $request->post('coupon_value');
+          $model->type = $request->post('type');
+          $model->min_order_amount = $request->post('min_order_amount');
+          $model->is_one_time = $request->post('is_one_time');
           $model->status = 1;
           if($model->save()){
             return redirect('/coupon');
@@ -46,13 +50,17 @@ class CouponControll extends Controller
        public function updatedata(Request $request, $id){
         $request->validate([
             'coupon_tittle'=>'required',
-            'coupon_value'=>'required',
+            'coupon_value'=>'required|numeric',
+            'min_order_amount'=>'required|numeric',
             'coupon_code'=>'required|unique:coupons,coupon_code,'.$id,
           ]);
           $model = Coupons::find($id);
           $model->coupon_tittle = $request->post('coupon_tittle');
           $model->coupon_code = $request->post('coupon_code');
           $model->coupon_value = $request->post('coupon_value');
+          $model->type = $request->post('type');
+          $model->min_order_amount = $request->post('min_order_amount');
+          $model->is_one_time = $request->post('is_one_time');
           if($model->save()){
             return redirect('/coupon');
           }else{

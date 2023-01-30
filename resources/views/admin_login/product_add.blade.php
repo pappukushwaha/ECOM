@@ -10,7 +10,6 @@
 <div class="col-lg-12 mt-3">
     <div class="card">
         <div class="card-body">
-           
                 <div class="form-group">
                     <label for="name" class="control-label mb-1">Name</label>
                     <input id="name" name="name" type="text" value="{{old('name')}}" class="form-control" placeholder="name">
@@ -116,7 +115,69 @@
                     <p class="text-danger">{{$message}}</p>
                 @enderror
                 </div>
-               
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4 mt-2">
+                            <label for="leed_time" class="control-label mb-1">Leed Time</label>
+                            <input id="leed_time" name="leed_time" type="text" value="{{old('leed_time')}}"  class="form-control" placeholder="Leed Time" >
+                            @error('leed_time')
+                            <p class="text-danger">{{$message}}</p>
+                            @enderror
+                        </div>
+                        <div class="col-md-4 mt-2">
+                            <label for="tax_desc" class="control-label mb-1">Tax</label>
+                            <select class="form-select form-control" name="tax_desc" aria-label="Default select example" required>
+                                <option value="">Select</option>
+                                @foreach ($tax as $item)
+                                <option value="{{$item->id}}">{{$item->tax_desc}}</option>
+                                @endforeach
+                            </select>
+                              @error('tax_desc')
+                            <p class="text-danger">{{$message}}</p>
+                        @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3 mt-2">
+                            <label for="is_promo" class="control-label mb-1">Is Promo</label>
+                            <select class="form-select form-control" name="is_promo" aria-label="Default select example" required>
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+                            <label for="is_featured" class="control-label mb-1">Is Featured</label>
+                            <select class="form-select form-control" name="is_featured" aria-label="Default select example" required>
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+                            <label for="is_descounted" class="control-label mb-1">Is Descounted</label>
+                            <select class="form-select form-control" name="is_descounted" aria-label="Default select example" required>
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 mt-2">
+                            <label for="is_trending" class="control-label mb-1">Is Trending</label>
+                            <select class="form-select form-control" name="is_trending" aria-label="Default select example" required>
+                                <option value="">Select</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div> 
         </div>
     </div>
 </div>

@@ -73,6 +73,10 @@
                             <a href="{{url('size')}}">
                                 <i class="fas fa-sitemap"></i>Size</a>
                         </li>
+                        <li class="@yield('tax_selected')">
+                            <a href="{{url('tax')}}">
+                                <i class="fas fa-shopping-basket"></i>Tax</a>
+                        </li>
                         <li class="@yield('color_selected')">
                             <a href="{{url('color')}}">
                                 <i class="fas fa-paint-brush"></i>Color</a>
@@ -85,6 +89,7 @@
                             <a href="{{url('product')}}">
                                 <i class="fas fa-shopping-basket"></i>Product</a>
                         </li>
+                       
                     </ul>
                 </div>
             </nav>
@@ -121,6 +126,10 @@
                                 <a href="{{url('color')}}">
                                     <i class="fas fa-paint-brush"></i>Color</a>
                             </li>
+                            <li class="@yield('tax_selected')">
+                                <a href="{{url('tax')}}">
+                                    <i class="fas fa-shopping-basket"></i>Tax</a>
+                            </li>
                             <li class="@yield('brand_selected')">
                                 <a href="{{url('brand')}}">
                                     <i class="fa fa-snowflake-o"></i>Brand</a>
@@ -129,6 +138,7 @@
                                 <a href="{{url('product')}}">
                                     <i class="fas fa-shopping-basket"></i>Product</a>
                             </li>
+                            
                            
                         </ul>
                     </ul>

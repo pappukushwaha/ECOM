@@ -6,6 +6,7 @@ use App\Http\Controllers\SizeControll;
 use App\Http\Controllers\ColorControll;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\TaxsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -75,6 +76,14 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::post('color_updatedata/{id}', [ColorControll::class, 'updatedata']);
     Route::get('color_delete/{id}', [ColorControll::class, 'delete']);
     Route::get('status_update_color/{status}/{id}', [ColorControll::class, 'status']);
+
+    Route::get('tax', [TaxsController::class, 'index']);
+    Route::get('tax_add', [TaxsController::class, 'tax_add']);
+    Route::post('tax_insert', [TaxsController::class, 'insert'])->name('tax_insert');
+    Route::get('tax_update/{id}', [TaxsController::class, 'update']);
+    Route::post('tax_updatedata/{id}', [TaxsController::class, 'updatedata']);
+    Route::get('tax_delete/{id}', [TaxsController::class, 'delete']);
+    Route::get('status_update_tax/{status}/{id}', [TaxsController::class, 'status']);
 
     Route::get('product', [ProductController::class, 'index']);
     Route::get('product_add', [ProductController::class, 'product_add']);

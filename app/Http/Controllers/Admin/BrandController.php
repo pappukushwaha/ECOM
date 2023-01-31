@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Brand;
+use App\Models\Admin\Brand;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +46,7 @@ class BrandController extends Controller
    }
 
    public function delete($id){
-    $arrImg = DB::table('brands')->where('id','=',$id)->get();
+       $arrImg = DB::table('brands')->where('id','=',$id)->get();
        $imgPath = $arrImg[0]->brand_img;
        Storage::delete('public/media/'.$imgPath);
        $delete = Brand::find($id)->delete();
@@ -58,6 +58,9 @@ class BrandController extends Controller
       ]);
       $model = Brand::find($id);
       if($request->hasFile('brand_img')){
+        $arrImg = DB::table('brands')->where('id','=',$id)->get();
+        $imgPath = $arrImg[0]->brand_img;
+        Storage::delete('public/media/'.$imgPath);
         $image=$request->file('brand_img');
         $ext=$image->extension();
         $image_name = time().'.'.$ext;

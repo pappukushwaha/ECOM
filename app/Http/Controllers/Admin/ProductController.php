@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Product;
+use App\Models\Admin\Product;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -184,18 +184,20 @@ class ProductController extends Controller
             }
           Storage::delete('public/media/'.$imgPath);
            $delete = Product::find($id)->delete();
+          DB::delete('delete from product_attr where product_id = '.$id);
+          DB::delete('delete from product_images where product_id = '.$id);
            return redirect('/product');
        }
 
        public function deleteattr($pattr, $pid){
         DB::delete('delete from product_attr where id = '.$pattr);
         return redirect('/product_update/'.$pid);
-    }
+        }
 
-    public function deleteimg($piid, $pid){
-      DB::delete('delete from product_images where id = '.$piid);
-      return redirect('/product_update/'.$pid);
-  }
+       public function deleteimg($piid, $pid){
+       DB::delete('delete from product_images where id = '.$piid);
+       return redirect('/product_update/'.$pid);
+      }
     
        
        public function updatedata(Request $request, $id){
@@ -218,6 +220,9 @@ class ProductController extends Controller
             'warranty'=>'required',
         ]);
         if($request->hasfile('image')){
+          $arrImg = DB::table('Products')->where('id','=',$id)->get();
+          $imgPath = $arrImg[0]->image;
+          Storage::delete('public/media/'.$imgPath);
             $image=$request->file('image');
             $ext=$image->extension();
             $image_name = time().'.'.$ext;
@@ -262,6 +267,8 @@ class ProductController extends Controller
             
             if ($paidArr[$key] != '') {
               if ($request->hasFile("att_image.$key")) {
+                $arrImgatt = DB::table('product_attr')->where('product_id','=',$id)->get();
+                  Storage::delete('public/media/'.$arrImgatt[$key]->att_image);
                 $rand = rand('11111111','99999999');
                 $att_image = $request->file("att_image.$key");
                 $ext=$att_image->extension();
@@ -287,6 +294,10 @@ class ProductController extends Controller
           if ($piid[$key] != '') {
             $productImgArr['product_id'] = $pid;
             if ($request->hasFile("product_image.$key")) {
+              $arrImgs = DB::table('product_images')->where('product_id','=',$id)->get();
+              
+              Storage::delete('public/media/'.$arrImgs[$key]->product_image);
+      
               $rand = rand('11111111','99999999');
               $att_image = $request->file("product_image.$key");
               $ext=$att_image->extension();

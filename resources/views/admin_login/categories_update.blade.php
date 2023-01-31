@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-md-4 mt-3">
                             <label for="parent_category" class="control-label mb-1">Parant Category</label>
-                            <select class="form-select form-control" name="parent_category" aria-label="Default select example" required>
+                            <select class="form-select form-control" name="parent_category" aria-label="Default select example" >
                                 <option value="">Select </option>
                                 @foreach ($category as $item)
                                 @if ($data->parent_category == $item->id)

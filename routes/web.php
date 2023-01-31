@@ -1,12 +1,13 @@
 <?php
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CategoryControll;
-use App\Http\Controllers\CouponControll;
-use App\Http\Controllers\SizeControll;
-use App\Http\Controllers\ColorControll;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\TaxsController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CategoryControll;
+use App\Http\Controllers\Admin\CouponControll;
+use App\Http\Controllers\Admin\SizeControll;
+use App\Http\Controllers\Admin\ColorControll;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\TaxsController;
+use App\Http\Controllers\Admin\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -102,5 +103,9 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::post('brand_updatedata/{id}', [BrandController::class, 'updatedata']);
     Route::get('brand_delete/{id}', [BrandController::class, 'delete']);
     Route::get('status_update_brand/{status}/{brand_id}', [BrandController::class, 'status']);
+
+    Route::get('customer', [CustomerController::class, 'index']);
+    Route::get('status_update_customer/{status}/{customer_id}', [CustomerController::class, 'status']);
+    Route::get('customer_show/{customer_id}', [CustomerController::class, 'show']);
 });
 

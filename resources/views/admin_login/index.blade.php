@@ -89,6 +89,10 @@
                             <a href="{{url('product')}}">
                                 <i class="fas fa-shopping-basket"></i>Product</a>
                         </li>
+                        <li class="@yield('customer_selected')">
+                            <a href="{{url('customer')}}">
+                                <i class="fas fa-user"></i>Customer</a>
+                        </li>
                        
                     </ul>
                 </div>
@@ -138,8 +142,10 @@
                                 <a href="{{url('product')}}">
                                     <i class="fas fa-shopping-basket"></i>Product</a>
                             </li>
-                            
-                           
+                            <li class="@yield('customer_selected')">
+                                <a href="{{url('customer')}}">
+                                    <i class="fas fa-user"></i>Customer</a>
+                            </li>
                         </ul>
                     </ul>
                 </nav>

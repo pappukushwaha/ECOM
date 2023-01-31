@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Categories;
+use App\Models\Admin\Categories;
 use Illuminate\Support\Facades\DB;
+use Storage;
 
 
 
@@ -57,6 +58,9 @@ class CategoryControll extends Controller
    }
 
    public function delete($id){
+      $arrImg = DB::table('Categories')->where('id','=',$id)->get();
+       $imgPath = $arrImg[0]->category_image;
+       Storage::delete('public/media/'.$imgPath);
        $delete = Categories::find($id)->delete();
        return redirect('/category');
    }
@@ -67,6 +71,9 @@ class CategoryControll extends Controller
       ]);
       $model = Categories::find($id);
       if($request->hasfile('category_image')){
+        $arrImg = DB::table('Categories')->where('id','=',$id)->get();
+       $imgPath = $arrImg[0]->category_image;
+       Storage::delete('public/media/'.$imgPath);
         $image=$request->file('category_image');
         $ext=$image->extension();
         $image_name = time().'.'.$ext;
@@ -75,7 +82,11 @@ class CategoryControll extends Controller
       }
       $model->category_name	= $request->post('category_name');
       $model->category_slug = $request->post('category_slug');
-      $model->parent_category = $request->post('parent_category');
+      if($request->post('parent_category') == ''){
+        $model->parent_category = 'null';
+      }else{
+        $model->parent_category = $request->post('parent_category');
+      }
       if($model->save()){
         return redirect('/category');
       }else{

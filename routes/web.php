@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Front\FrontController;
 use App\Http\Controllers\Admin\CategoryControll;
 use App\Http\Controllers\Admin\CouponControll;
 use App\Http\Controllers\Admin\SizeControll;
@@ -23,6 +24,9 @@ use Illuminate\Support\Facades\Route;
 
 
 
+Route::get('/',[FrontController::class, 'index']);
+
+
 Route::get('/admin',[AdminController::class, 'index'])->name('admin');
 Route::post('/admin/auth',[AdminController::class, 'auth'])->name('admin.auth');
 Route::get('/admin/reg',[AdminController::class, 'register'])->name('admin.reg');
@@ -32,9 +36,9 @@ Route::post('/admin/reg',[AdminController::class, 'store'])->name('admin.reg');
 
 
 Route::group(['middleware'=>'admin_auth'], function(){
-    Route::get('/', function () {
-        return view('admin_login/index');
-    });
+    // Route::get('/', function () {
+    //     return view('welcome');
+    // });
 
     Route::get('/index', function(){
         return view('admin_login/index');

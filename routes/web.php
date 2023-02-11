@@ -26,13 +26,9 @@ use App\Http\Controllers\Front\FrontController;
 
 
 
-Route::get('/',[FrontController::class, 'index']);
 
 
-
-
-
-
+//Admin Route Set Start
 
 Route::get('/admin',[AdminController::class, 'index'])->name('admin');
 Route::post('/admin/auth',[AdminController::class, 'auth'])->name('admin.auth');
@@ -40,13 +36,6 @@ Route::get('/admin/reg',[AdminController::class, 'register'])->name('admin.reg')
 Route::post('/admin/reg',[AdminController::class, 'store'])->name('admin.reg');
 
 Route::group(['middleware'=>'admin_auth'], function(){
-    // Route::get('/', function () {
-    //     return view('welcome');
-    // });
-
-    // Route::get('/index', function(){
-    //     return view('admin_login/index');
-    // });
     Route::get('logout', function(){
         session()->pull('ADMIN_ID');
         return redirect('admin');
@@ -117,3 +106,11 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::get('customer_show/{customer_id}', [CustomerController::class, 'show']);
 });
 
+//Admin Route Set End 
+
+
+//From End Route Set Start
+
+Route::get('/',[FrontController::class, 'index']);
+
+//From End Route Set End

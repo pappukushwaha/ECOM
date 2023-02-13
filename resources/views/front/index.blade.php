@@ -92,10 +92,9 @@
                 <div class="aa-promo-right">
                 @foreach ($home_categories as $item)
                     
-                
                   <div class="aa-single-promo-right">
-                    <div class="aa-promo-banner">                      
-                      <img src="{{asset('storage/media')}}/{{$item->category_image}}" alt="img">                      
+                    <div class="aa-promo-banner col-md-4">                      
+                      <img src="{{asset('storage/media')}}/{{$item->category_image}}" class="img-fluid" alt="img">                      
                       <div class="aa-prom-content">
                         <h4><a href="{{url('category/'.$item->category_slug)}}">{{$item->category_name}}</a></h4>                        
                       </div>
@@ -122,89 +121,51 @@
                 <!-- start prduct navigation -->
                  <ul class="nav nav-tabs aa-products-tab">
                   @foreach ($home_categories as $item)
-                    <li class=""><a href="#{{$item->id}}" data-toggle="tab">{{$item->category_name}}</a></li>
+                    <li class=""><a href="#cat{{$item->id}}" data-toggle="tab">{{$item->category_name}}</a></li>
                     @endforeach
                   </ul>
                   <!-- Tab panes -->
                   <div class="tab-content">
                     <!-- Start men product category -->
-                    <div class="tab-pane fade in active" id="men">
+                    @php
+                    $loop_count = 1;    
+                    @endphp
+                    @foreach ($home_categories as $item)
+                    @php
+                       $class_active='';
+                        if($loop_count==1){
+                           $class_active='in active';
+                           $loop_count++;
+                        }
+                    @endphp
+                    <div class="tab-pane fade {{$class_active}}" id="cat{{$item->id}}">
                       <ul class="aa-product-catg">
                         <!-- start single product item -->
+                        @if (isset($home_categories_product[$item->id][0]))
+                        @foreach ($home_categories_product[$item->id] as $product)
+                          <li>
+                            <figure>
+                              <a class="aa-product-img" href="{{url('/product/'.$product->slug)}}"><img src="{{asset('storage/media')}}/{{$product->image}}" width="250px" height="300px" alt="polo shirt img"></a>
+                              <a class="aa-add-card-btn"href="{{url('/product/'.$product->slug)}}"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                                <figcaption>
+                                <h4 class="aa-product-title"><a href="{{url('/product/'.$product->slug)}}">{{$product->name}}</a></h4>
+                                <span class="aa-product-price">Rs {{$home_product_attr[$product->id][0]->price}}</span><span class="aa-product-price"><del>Rs {{$home_product_attr[$product->id][0]->mrp}}</del></span>
+                              </figcaption>
+                            </figure>                        
+                          </li>
+                        @endforeach
+                        @else
                         <li>
                           <figure>
-                            <a class="aa-product-img" href="#"><img src="{{asset('front_assets/img/man/polo-shirt-2.png')}}" alt="polo shirt img"></a>
-                            <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
-                              <figcaption>
-                              <h4 class="aa-product-title"><a href="#">Polo T-Shirt</a></h4>
-                              <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65.50</del></span>
-                            </figcaption>
-                          </figure>                        
+                            No Data Found
+                          </figure>
                         </li>
+                        @endif
+
                       </ul>
-                      <a class="aa-browse-btn" href="#">Browse all Product <span class="fa fa-long-arrow-right"></span></a>
                     </div>
+                    @endforeach
                     <!-- / men product category -->
-                    <!-- start women product category -->
-                    <div class="tab-pane fade" id="women">
-                      <ul class="aa-product-catg">
-                        <!-- start single product item -->
-                        <li>
-                          <figure>
-                            <a class="aa-product-img" href="#"><img src="{{asset('front_assets/img/women/girl-1.png')}}" alt="polo shirt img"></a>
-                            <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
-                            <figcaption>
-                              <h4 class="aa-product-title"><a href="#">This is Title</a></h4>
-                              <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65.50</del></span>
-                            </figcaption>
-                          </figure>                         
-                        </li>
-                        <!-- start single product item -->
-                      </ul>
-                      <a class="aa-browse-btn" href="#">Browse all Product <span class="fa fa-long-arrow-right"></span></a>
-                    </div>
-                    <!-- / women product category -->
-                    <!-- start sports product category -->
-                    <div class="tab-pane fade" id="sports">
-                      <ul class="aa-product-catg">
-                        <!-- start single product item -->
-                        <li>
-                          <figure>
-                            <a class="aa-product-img" href="#"><img src="{{asset('front_assets/img/sports/sport-1.png')}}" alt="polo shirt img"></a>
-                            <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
-                            <figcaption>
-                              <h4 class="aa-product-title"><a href="#">This is Title</a></h4>
-                              <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65.50</del></span>
-                            </figcaption>
-                          </figure>                         
-                         
-                        </li>
-                        <!-- start single product item -->
-                                         
-                      </ul>
-                    </div>
-                    <!-- / sports product category -->
-                    <!-- start electronic product category -->
-                    <div class="tab-pane fade" id="electronics">
-                       <ul class="aa-product-catg">
-                        <!-- start single product item -->
-                        <li>
-                          <figure>
-                            <a class="aa-product-img" href="#"><img src="{{asset('front_assets/img/electronics/electronic-1.png')}}" alt="polo shirt img"></a>
-                            <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
-                            <figcaption>
-                              <h4 class="aa-product-title"><a href="#">This is Title</a></h4>
-                              <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65.50</del></span>
-                            </figcaption>
-                          </figure>                         
-                          
-                        </li>
-                        <!-- start single product item -->
-                                     
-                      </ul>
-                      <a class="aa-browse-btn" href="#">Browse all Product <span class="fa fa-long-arrow-right"></span></a>
-                    </div>
-                    <!-- / electronic product category -->
                   </div>
                                
               </div>
@@ -238,14 +199,14 @@
             <div class="aa-popular-category-area">
               <!-- start prduct navigation -->
              <ul class="nav nav-tabs aa-products-tab">
-                <li class="active"><a href="#popular" data-toggle="tab">Popular</a></li>
-                <li><a href="#featured" data-toggle="tab">Featured</a></li>
-                <li><a href="#latest" data-toggle="tab">Latest</a></li>                    
+                <li class="active"><a href="#featured" data-toggle="tab">Featured</a></li>
+                <li><a href="#tranding" data-toggle="tab">Tranding</a></li>
+                <li><a href="#discount" data-toggle="tab">Discount</a></li>                    
               </ul>
               <!-- Tab panes -->
               <div class="tab-content">
                 <!-- Start men popular category -->
-                <div class="tab-pane fade in active" id="popular">
+                <div class="tab-pane fade in active" id="featured">
                   <ul class="aa-product-catg aa-popular-slider">
                     <!-- start single product item -->
                     <li>
@@ -254,7 +215,7 @@
                         <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                          <figcaption>
                           <h4 class="aa-product-title"><a href="#">Polo T-Shirt</a></h4>
-                          <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65.50</del></span>
+                          <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$6335.50</del></span>
                         </figcaption>
                       </figure>                     
                     </li>
@@ -266,7 +227,7 @@
                 <!-- / popular product category -->
                 
                 <!-- start featured product category -->
-                <div class="tab-pane fade" id="featured">
+                <div class="tab-pane fade" id="tranding">
                  <ul class="aa-product-catg aa-featured-slider">
                     <!-- start single product item -->
                     <li>
@@ -275,7 +236,7 @@
                         <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                          <figcaption>
                           <h4 class="aa-product-title"><a href="#">Polo T-Shirt</a></h4>
-                          <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65.50</del></span>
+                          <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$652222.50</del></span>
                         </figcaption>
                       </figure>                     
                       
@@ -288,7 +249,7 @@
                 <!-- / featured product category -->
 
                 <!-- start latest product category -->
-                <div class="tab-pane fade" id="latest">
+                <div class="tab-pane fade" id="discount">
                   <ul class="aa-product-catg aa-latest-slider">
                     <!-- start single product item -->
                     <li>
@@ -297,7 +258,7 @@
                         <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                          <figcaption>
                           <h4 class="aa-product-title"><a href="#">Polo T-Shirt</a></h4>
-                          <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65.50</del></span>
+                          <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65111.50</del></span>
                         </figcaption>
                       </figure>                     
                       
@@ -329,17 +290,9 @@
         <div class="col-md-12">
           <div class="aa-client-brand-area">
             <ul class="aa-client-brand-slider">
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-java.png')}}" alt="java img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-jquery.png')}}" alt="jquery img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-html5.png')}}" alt="html5 img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-css3.png')}}" alt="css3 img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-wordpress.png')}}" alt="wordPress img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-joomla.png')}}" alt="joomla img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-java.png')}}" alt="java img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-jquery.png')}}" alt="jquery img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-html5.png')}}" alt="html5 img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-css3.png')}}" alt="css3 img"></a></li>
-              <li style="height: 10%;"><a href="#"><img src="{{asset('front_assets/img/client-brand-wordpress.png')}}" alt="wordPress img"></a></li>
+              @foreach ($home_brand as $brand)
+              <li style="height: 10%;"><a href="#"><img src="{{asset('storage/media')}}/{{$brand->brand_img}}" alt="{{$brand->brand}}"></a></li>
+              @endforeach
             </ul>
           </div>
         </div>

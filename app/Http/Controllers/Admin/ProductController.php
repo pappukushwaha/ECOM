@@ -264,7 +264,7 @@ class ProductController extends Controller
             $productAttArr['qty'] =$qtyArr[$key];
             $productAttArr['size_id'] =$size_idArr[$key];
             $productAttArr['color_id'] =$color_idArr[$key];
-            
+            DB::table('product_attr')->where(['id'=>$paidArr[$key]])->update($productAttArr);
             if ($paidArr[$key] != '') {
               if ($request->hasFile("att_image.$key")) {
                 $arrImgatt = DB::table('product_attr')->where('product_id','=',$id)->get();
@@ -289,6 +289,7 @@ class ProductController extends Controller
              }
             }
           }
+
           $piid = $request->post('piid');
           foreach ($piid as $key => $value) {
           if ($piid[$key] != '') {

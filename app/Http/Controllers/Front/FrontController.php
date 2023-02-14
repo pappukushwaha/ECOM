@@ -13,6 +13,10 @@ class FrontController extends Controller
       ->where(['status'=>1])
       ->get();
 
+      $result['home_banners']=DB::table('home_banners')
+      ->where(['status'=>1])
+      ->get();
+
       $result['home_brand']=DB::table('brands')
       ->where(['status'=>1])
       ->get();
@@ -47,7 +51,7 @@ class FrontController extends Controller
          ->where(['status'=>1])
          ->get();
          foreach($result['home_trending_product'][$lits->id] as $lits1){
-            $result['home_featured_product_attr'][$lits1->id]=DB::table('product_attr')
+            $result['home_trending_product_attr'][$lits1->id]=DB::table('product_attr')
             ->leftjoin('sizes','sizes.id','=','product_attr.size_id')
             ->leftjoin('colores','colores.id','=','product_attr.color_id')
             ->where(['product_id'=>$lits1->id])
@@ -59,15 +63,15 @@ class FrontController extends Controller
          ->where(['status'=>1])
          ->get();
          foreach($result['home_descounted_product'][$lits->id] as $lits1){
-            $result['home_featured_product_attr'][$lits1->id]=DB::table('product_attr')
+            $result['home_descounted_product_attr'][$lits1->id]=DB::table('product_attr')
             ->leftjoin('sizes','sizes.id','=','product_attr.size_id')
             ->leftjoin('colores','colores.id','=','product_attr.color_id')
             ->where(['product_id'=>$lits1->id])
             ->get();
          }
-      echo "<pre>";
-      print_r($result);
-      echo "</pre>";
+      // echo "<pre>";
+      // print_r($result);
+      // echo "</pre>";
     return view('front.index', $result);
    }
    public function fromshow(){

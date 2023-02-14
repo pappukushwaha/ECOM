@@ -7,66 +7,24 @@
       <div id="sequence" class="seq">
         <div class="seq-screen">
           <ul class="seq-canvas">
+
             <!-- single slide item -->
+            @foreach ($home_banners as $item)
             <li>
               <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/1.jpg')}}" alt="Men slide img" />
+                <img data-seq src="{{asset('storage/media')}}/{{$item->image}}" alt="Men slide img" />
               </div>
-              <div class="seq-title">
-               <span data-seq>Save Up to 75% Off</span>                
-                <h2 data-seq>Men Collection</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
+              @if ($item->btn_txt != '')
+                <div class="seq-title">
+                <a data-seq href="{{$item->btn_link}}" target="_blank" class="aa-shop-now-btn aa-secondary-btn">{{$item->btn_txt}}</a>
               </div>
+              @endif
+             
             </li>
+            @endforeach
             <!-- single slide item -->
-            <li>
-              <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/2.jpg')}}" alt="Wristwatch slide img" />
-              </div>
-              <div class="seq-title">
-                <span data-seq>Save Up to 40% Off</span>                
-                <h2 data-seq>Wristwatch Collection</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
-              </div>
-            </li>
-            <!-- single slide item -->
-            <li>
-              <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/3.jpg')}}" alt="Women Jeans slide img" />
-              </div>
-              <div class="seq-title">
-                <span data-seq>Save Up to 75% Off</span>                
-                <h2 data-seq>Jeans Collection</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
-              </div>
-            </li>
-            <!-- single slide item -->           
-            <li>
-              <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/4.jpg')}}" alt="Shoes slide img" />
-              </div>
-              <div class="seq-title">
-                <span data-seq>Save Up to 75% Off</span>                
-                <h2 data-seq>Exclusive Shoes</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
-              </div>
-            </li>
-            <!-- single slide item -->  
-             <li>
-              <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/5.jpg')}}" alt="Male Female slide img" />
-              </div>
-              <div class="seq-title">
-                <span data-seq>Save Up to 50% Off</span>                
-                <h2 data-seq>Best Collection</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
-              </div>
-            </li>                   
+
+                       
           </ul>
         </div>
         <!-- slider navigation btn -->
@@ -209,16 +167,26 @@
                 <div class="tab-pane fade in active" id="featured">
                   <ul class="aa-product-catg aa-popular-slider">
                     <!-- start single product item -->
+                    @if (isset($home_featured_product[$item->id][0]))
+                    @foreach ($home_featured_product[$item->id] as $product)
                     <li>
                       <figure>
-                        <a class="aa-product-img" href="#"><img src="{{asset('front_assets/img/man/polo-shirt-2.png')}}" alt="polo shirt img"></a>
-                        <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                        <a class="aa-product-img" href="{{url('/product/'.$product->slug)}}"><img src="{{asset('storage/media')}}/{{$product->image}}" alt="polo shirt img"></a>
+                        <a class="aa-add-card-btn"href="{{url('/product/'.$product->slug)}}"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                          <figcaption>
-                          <h4 class="aa-product-title"><a href="#">Polo T-Shirt</a></h4>
-                          <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$6335.50</del></span>
+                          <h4 class="aa-product-title"><a href="{{url('/product/'.$product->slug)}}">{{$product->name}}</a></h4>
+                          <span class="aa-product-price">Rs {{$home_featured_product_attr[$product->id][0]->price}}</span><span class="aa-product-price"><del>Rs {{$home_featured_product_attr[$product->id][0]->mrp}}</del></span>
                         </figcaption>
                       </figure>                     
                     </li>
+                    @endforeach
+                        @else
+                        <li>
+                          <figure>
+                            No Data Found
+                          </figure>
+                        </li>
+                        @endif
                      <!-- start single product item -->
                                                                                                 
                   </ul>
@@ -230,17 +198,26 @@
                 <div class="tab-pane fade" id="tranding">
                  <ul class="aa-product-catg aa-featured-slider">
                     <!-- start single product item -->
+                    @if (isset($home_trending_product[$item->id][0]))
+                    @foreach ($home_trending_product[$item->id] as $product)
                     <li>
                       <figure>
-                        <a class="aa-product-img" href="#"><img src="{{asset('front_assets/img/man/polo-shirt-2.png')}}" alt="polo shirt img"></a>
-                        <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                        <a class="aa-product-img" href="{{url('/product/'.$product->slug)}}"><img src="{{asset('storage/media')}}/{{$product->image}}" alt="polo shirt img"></a>
+                        <a class="aa-add-card-btn"href="{{url('/product/'.$product->slug)}}"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                          <figcaption>
-                          <h4 class="aa-product-title"><a href="#">Polo T-Shirt</a></h4>
-                          <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$652222.50</del></span>
+                          <h4 class="aa-product-title"><a href="{{url('/product/'.$product->slug)}}">{{$product->name}}</a></h4>
+                          <span class="aa-product-price">Rs {{$home_trending_product_attr[$product->id][0]->price}}</span><span class="aa-product-price"><del>Rs {{$home_trending_product_attr[$product->id][0]->mrp}}</del></span>
                         </figcaption>
                       </figure>                     
-                      
                     </li>
+                    @endforeach
+                        @else
+                        <li>
+                          <figure>
+                            No Data Found
+                          </figure>
+                        </li>
+                        @endif
                      <!-- start single product item -->
                                                                                               
                   </ul>
@@ -252,23 +229,31 @@
                 <div class="tab-pane fade" id="discount">
                   <ul class="aa-product-catg aa-latest-slider">
                     <!-- start single product item -->
+                    @if (isset($home_descounted_product[$item->id][0]))
+                    @foreach ($home_descounted_product[$item->id] as $product)
                     <li>
                       <figure>
-                        <a class="aa-product-img" href="#"><img src="{{asset('front_assets/img/man/polo-shirt-2.png')}}" alt="polo shirt img"></a>
-                        <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                        <a class="aa-product-img" href="{{url('/product/'.$product->slug)}}"><img src="{{asset('storage/media')}}/{{$product->image}}" alt="polo shirt img"></a>
+                        <a class="aa-add-card-btn"href="{{url('/product/'.$product->slug)}}"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                          <figcaption>
-                          <h4 class="aa-product-title"><a href="#">Polo T-Shirt</a></h4>
-                          <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65111.50</del></span>
+                          <h4 class="aa-product-title"><a href="{{url('/product/'.$product->slug)}}">{{$product->name}}</a></h4>
+                          <span class="aa-product-price">Rs {{$home_descounted_product_attr[$product->id][0]->price}}</span><span class="aa-product-price"><del>Rs {{$home_descounted_product_attr[$product->id][0]->mrp}}</del></span>
                         </figcaption>
                       </figure>                     
-                      
                     </li>
+                    @endforeach
+                        @else
+                        <li>
+                          <figure>
+                            No Data Found
+                          </figure>
+                        </li>
+                        @endif
                      <!-- start single product item -->
                     
                     <!-- start single product item -->
                                                                                            
                   </ul>
-                   <a class="aa-browse-btn" href="#">Browse all Product <span class="fa fa-long-arrow-right"></span></a>
                 </div>
                 <!-- / latest product category -->              
               </div>
@@ -291,7 +276,7 @@
           <div class="aa-client-brand-area">
             <ul class="aa-client-brand-slider">
               @foreach ($home_brand as $brand)
-              <li style="height: 10%;"><a href="#"><img src="{{asset('storage/media')}}/{{$brand->brand_img}}" alt="{{$brand->brand}}"></a></li>
+              <li style="height: 80px;"><a href="#"><img src="{{asset('storage/media')}}/{{$brand->brand_img}}" alt="{{$brand->brand}}"></a></li>
               @endforeach
             </ul>
           </div>

@@ -64,6 +64,10 @@
                             <a href="{{url('category')}}">
                                 <i class="fas fa-list"></i>Category</a>
                         </li>
+                        <li class="@yield('homeBanner_selected')">
+                            <a href="{{url('homeBanner')}}">
+                                <i class="fas fa-images"></i>Home Banner</a>
+                        </li>
                         <li class="@yield('coupon_selected')">
                             <a href="{{url('coupon')}}">
                                 <i class="fas fa-tag"></i>Coupon</a>
@@ -117,6 +121,10 @@
                             </li>
                             <li class="@yield('category_selected')">
                                 <a href="{{url('category')}}"> <i class="fas fa-list"></i>Category</a>
+                            </li>
+                            <li class="@yield('homeBanner_selected')">
+                                <a href="{{url('homeBanner')}}">
+                                    <i class="fas fa-images"></i>Home Banner</a>
                             </li>
                             <li class="@yield('coupon_selected')">
                                 <a href="{{url('coupon')}}">

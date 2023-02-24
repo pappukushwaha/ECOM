@@ -124,5 +124,6 @@ Route::group(['middleware'=>'admin_auth'], function(){
 //From End Route Set Start
 
 Route::get('/',[FrontController::class, 'index']);
+Route::get('/product/{slug}',[FrontController::class, 'product']);
 
 //From End Route Set End

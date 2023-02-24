@@ -69,12 +69,26 @@ class FrontController extends Controller
             ->where(['product_id'=>$lits1->id])
             ->get();
          }
-      // echo "<pre>";
-      // print_r($result);
-      // echo "</pre>";
+         // echo "<pre>";
+         // print_r($result);
+         // echo "</pre>";
     return view('front.index', $result);
    }
-   public function fromshow(){
+   public function product(Request $request, $slug){
+      $result['product']=DB::table('products')
+         ->where(['slug'=>$slug])
+         ->where(['status'=>1])
+         ->get();
+         foreach($result['product'] as $lits1){
+            $result['product_attr'][$lits1->id]=DB::table('product_attr')
+            ->leftjoin('sizes','sizes.id','=','product_attr.size_id')
+            ->leftjoin('colores','colores.id','=','product_attr.color_id')
+            ->where(['product_id'=>$lits1->id])
+            ->get();
+         }
+         // echo "<pre>";
+         // print_r($result);
 
+      return view("front.product", $result);
    }
 }

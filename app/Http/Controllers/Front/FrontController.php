@@ -89,6 +89,26 @@ class FrontController extends Controller
          // echo "<pre>";
          // print_r($result);
 
+         $result['related_product']=DB::table('products')
+         ->where('slug','!=',$slug)
+         ->where(['status'=>1])
+         ->where(['category_id'=>$result['product'][0]->category_id])
+         ->get();
+
+         foreach($result['related_product'] as $lits1){
+            $result['related_product_attr'][$lits1->id]=DB::table('product_attr')
+            ->leftjoin('sizes','sizes.id','=','product_attr.size_id')
+            ->leftjoin('colores','colores.id','=','product_attr.color_id')
+            ->where(['product_id'=>$lits1->id])
+            ->get();
+         }
+
+         foreach($result['product'] as $lits1){
+            $result['product_images'][$lits1->id]=DB::table('product_images')
+            ->where(['product_id'=>$lits1->id])
+            ->get();
+         }
+
       return view("front.product", $result);
    }
 }

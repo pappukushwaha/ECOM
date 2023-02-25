@@ -1,7 +1,8 @@
 @extends('front.layout')
-
+@section('tittle')
+{{$product[0]->name}}
+@endsection
 @section('container')
-
   <!-- catg header banner section -->
   <section id="aa-catg-head-banner">
     {{-- <img src="img/fashion/fashion-header-bg-8.jpg" alt="fashion img"> --}}
@@ -19,7 +20,6 @@
     </div>
    </section>
    <!-- / catg header banner section -->
- 
    <!-- product category -->
    <section id="aa-product-details">
      <div class="container">
@@ -38,11 +38,17 @@
                        <div class="simpleLens-thumbnails-container">
                            {{-- <a data-big-image="{{asset('storage/media')}}/{{$product[0]->image}}" data-lens-image="{{asset('storage/media')}}/{{$product[0]->image}}" class="simpleLens-thumbnail-wrapper" href="#">
                              <img src="img/view-slider/thumbnail/polo-shirt-1.png">
-                           </a>                                     --}}
+                           </a>   --}}
                            <a data-big-image="{{asset('storage/media')}}/{{$product[0]->image}}" data-lens-image="{{asset('storage/media')}}/{{$product[0]->image}}" class="simpleLens-thumbnail-wrapper" href="#">
                              <img src="{{asset('storage/media')}}/{{$product[0]->image}}" width="50px">
                            </a>
-                           
+                           @if (isset($product_images[$product[0]->id][0]))
+                            @foreach ($product_images[$product[0]->id] as $item)
+                            <a data-big-image="{{asset('storage/media')}}/{{$item->product_image}}" data-lens-image="{{asset('storage/media')}}/{{$item->product_image}}" class="simpleLens-thumbnail-wrapper" href="#">
+                              <img src="{{asset('storage/media')}}/{{$item->product_image}}" width="50px">
+                            </a>
+                            @endforeach
+                           @endif
                        </div>
                      </div>
                    </div>
@@ -52,25 +58,35 @@
                    <div class="aa-product-view-content">
                      <h3>{{$product[0]->name}}</h3>
                      <div class="aa-price-block">
-                      <span class="aa-product-view-price">Rs {{$product_attr[$product[0]->id][0]->price}}</span>
+                      <span class="aa-product-view-price">  Rs {{$product_attr[$product[0]->id][0]->price}} &nbsp;&nbsp; <del> Rs {{$product_attr[$product[0]->id][0]->mrp}}</del></span>
                        <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
                        <p class="" style="color: red; font-weight: bold; margin-top: -12px">Leed Time: {{$product[0]->leed_time}}<span></span></p>
                      </div>
                      <p>{{$product[0]->short_desc}}</p>
                      <h4>Size</h4>
                      <div class="aa-prod-view-size">
-                       <a href="#">S</a>
-                       <a href="#">M</a>
-                       <a href="#">L</a>
-                       <a href="#">XL</a>
+                      @php
+                      $arrSize = [];
+                      foreach ($product_attr[$product[0]->id] as $attr){
+                        $arrSize[] = $attr->size;
+                      }
+                      $arrSize = array_unique($arrSize); 
+                      @endphp
+                      @foreach ($arrSize as $attr)
+                      @if ($attr != '')
+                      <a href="javascript:void(0)" onclick="showColor('{{$attr}}')" class="size_border" id="size_{{$attr}}" >{{strtoupper($attr)}}</a>
+                      @endif
+                      @endforeach
                      </div>
                      <h4>Color</h4>
                      <div class="aa-color-tag">
-                       <a href="#" class="aa-color-green"></a>
-                       <a href="#" class="aa-color-yellow"></a>
-                       <a href="#" class="aa-color-pink"></a>                      
-                       <a href="#" class="aa-color-black"></a>
-                       <a href="#" class="aa-color-white"></a>                      
+                       
+                       @foreach ($product_attr[$product[0]->id] as $attr)
+                       @if ($attr->color != '')
+                       
+                       <a href="javascript:void(0)" class="aa-color-{{strtolower($attr->color)}} product_color size_{{$attr->size}}" onclick="change_product_color_image('{{asset('storage/media')}}/{{$attr->att_image}}')" ></a>
+                       @endif
+                       @endforeach                     
                      </div>
                      <div class="aa-prod-quantity">
                        <form action="">
@@ -99,6 +115,9 @@
              <div class="aa-product-details-bottom">
                <ul class="nav nav-tabs" id="myTab2">
                  <li><a href="#description" data-toggle="tab">Description</a></li>
+                 <li><a href="#technical_specification" data-toggle="tab">Technical Specification</a></li>
+                 <li><a href="#uses" data-toggle="tab">Uses</a></li>
+                 <li><a href="#warranty" data-toggle="tab">Warranty</a></li>
                  <li><a href="#review" data-toggle="tab">Reviews</a></li>                
                </ul>
  
@@ -107,6 +126,15 @@
                  <div class="tab-pane fade in active" id="description">
                    <p>{{$product[0]->desc}}</p>
                  </div>
+                 <div class="tab-pane" id="technical_specification">
+                  <p>{{$product[0]->technical_specification}}</p>
+                </div>
+                <div class="tab-pane" id="uses">
+                  <p>{{$product[0]->uses}}</p>
+                </div>
+                <div class="tab-pane" id="warranty">
+                  <p>{{$product[0]->warranty}}</p>
+                </div>
                  <div class="tab-pane fade " id="review">
                   <div class="aa-product-review-area">
                     <h4>2 Reviews for T-Shirt</h4> 
@@ -168,35 +196,27 @@
                <h3>Related Products</h3>
                <ul class="aa-product-catg aa-related-item-slider">
                  <!-- start single product item -->
-                 
-                 " <!-- start single product item -->
-                
-                 <!-- start single product item -->
-                 
-                 <!-- start single product item -->
-                 
-                 <!-- start single product item -->
-                     
-                 <!-- start single product item -->
-                
-                 <!-- start single product item -->
-                 <li>
-                   <figure>
-                     <a class="aa-product-img" href="#"><img src="img/women/girl-1.png" alt="polo shirt img"></a>
-                     <a class="aa-add-card-btn"href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
-                      <figcaption>
-                       <h4 class="aa-product-title"><a href="#">This is Title</a></h4>
-                       <span class="aa-product-price">$45.50</span><span class="aa-product-price"><del>$65.50</del></span>
-                     </figcaption>
-                   </figure>                     
-                   <div class="aa-product-hvr-content">
-                     <a href="#" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
-                     <a href="#" data-toggle="tooltip" data-placement="top" title="Compare"><span class="fa fa-exchange"></span></a>
-                     <a href="#" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal" data-target="#quick-view-modal"><span class="fa fa-search"></span></a>                            
-                   </div>
-                   <!-- product badge -->
-                   
-                 </li>                                                                                   
+                  <!-- start single product item -->
+                  @if (isset($related_product[0]))
+                  @foreach ($related_product as $products)
+                  <li>
+                    <figure>
+                      <a class="aa-product-img" href="{{url('/product/'.$products->slug)}}"><img src="{{asset('storage/media')}}/{{$products->image}}" alt="polo shirt img"></a>
+                      <a class="aa-add-card-btn"href="{{url('/product/'.$products->slug)}}"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                       <figcaption>
+                        <h4 class="aa-product-title"><a href="{{url('/product/'.$products->slug)}}">{{$products->name}}</a></h4>
+                        <span class="aa-product-price">Rs {{$related_product_attr[$products->id][0]->price}}</span><span class="aa-product-price"><del>Rs {{$related_product_attr[$products->id][0]->mrp}}</del></span>
+                      </figcaption>
+                    </figure>                     
+                  </li>
+                  @endforeach
+                      @else
+                      <li>
+                        <figure>
+                          No Data Found
+                        </figure>
+                      </li>
+                      @endif                                                                                 
                </ul>
                <!-- quick view modal -->                  
                <div class="modal fade" id="quick-view-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -240,9 +260,9 @@
                          <!-- Modal view content -->
                          <div class="col-md-6 col-sm-6 col-xs-12">
                            <div class="aa-product-view-content">
-                             <h3>T-Shirt</h3>
+                             <h3>{{ $product[0]->name }}</h3>
                              <div class="aa-price-block">
-                               <span class="aa-product-view-price">$34.99</span>
+                               <span class="aa-product-view-price">{{ $product_attr[$product[0]->id][0]->price}}</span>
                                <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
                              </div>
                              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis animi, veritatis quae repudiandae quod nulla porro quidem, itaque quis quaerat!</p>
@@ -287,4 +307,8 @@
      </div>
    </section>
    <!-- / product category -->
+   <form action="">
+     <input type="hidden" id="size_id" name="size_id">
+    <input type="hidden" id="color_id" name="color_id">
+   </form>
 @endsection

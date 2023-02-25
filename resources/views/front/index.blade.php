@@ -1,5 +1,7 @@
 @extends('front.layout')
-
+@section('tittle')
+Product Section
+@endsection
 @section('container')
   <!-- Start slider -->
   <section id="aa-slider">
@@ -49,7 +51,6 @@
               <div class="col-md-12 no-padding">
                 <div class="aa-promo-right">
                 @foreach ($home_categories as $item)
-                    
                   <div class="aa-single-promo-right">
                     <div class="aa-promo-banner col-md-4">                      
                       <img src="{{asset('storage/media')}}/{{$item->category_image}}" class="img-fluid" alt="img">                      

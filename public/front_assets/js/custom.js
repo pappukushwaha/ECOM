@@ -357,3 +357,17 @@ jQuery(function($){
     
 });
 
+
+function change_product_color_image(img){
+  jQuery('.simpleLens-big-image-container').html('<a data-big-image="'+img+'" data-lens-image="'+img+'" class="simpleLens-lens-image" href="#">  <img src="'+img+'" class="simpleLens-big-image"></a>')
+  // jQuery('#color_id').val(color);
+
+}
+
+function showColor(size){
+  jQuery('.product_color').hide();
+  jQuery('.size_border').css('border', '1px solid #ddd');
+  jQuery('.size_'+size).show();
+  jQuery('#size_'+size).css('border','1px solid #000');
+  jQuery('#size_id').val(size);
+}

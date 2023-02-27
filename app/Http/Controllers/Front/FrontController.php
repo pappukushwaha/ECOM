@@ -111,4 +111,77 @@ class FrontController extends Controller
 
       return view("front.product", $result);
    }
+
+   public function add_to_cart(Request $request){
+      if($request->session()->has('FRONT_USER_LOGIN')){
+         $uid = $request->session()->get('USER_LOGIN');
+         $user_type = "Reg";
+      }else{
+         $uid = getrandomuserid();
+         $user_type = "Not-Reg";
+      }
+      $size_id = $request->post('size_id');
+      $color_id = $request->post('color_id');
+      $pqty = $request->post('pqty');
+      $product_id = $request->post('product_id');
+      $result=DB::table('product_attr')
+            ->select('product_attr.id')
+            ->leftjoin('sizes','sizes.id','=','product_attr.size_id')
+            ->leftjoin('colores','colores.id','=','product_attr.color_id')
+            ->where(['product_id'=>$product_id])
+            ->where(['sizes.size'=>$size_id])
+            ->where(['colores.color'=>$color_id])
+            ->get();
+
+     $product_attr_id = $result[0]->id;
+     $check = DB::table('cart')
+     ->where(['userid'=>$uid])
+     ->where(['usertype'=>$user_type])
+     ->where(['product_id'=>$product_id])
+     ->where(['product_attr_id'=>$product_attr_id])
+     ->get();
+     
+     if(isset($check[0])){
+      $updated_id = $check[0]->id;
+      DB::table('cart')
+     ->where(['id'=>$updated_id])
+     ->update(['qty'=>$pqty]);
+     $msg = "update";
+     }else{
+      $id = DB::table('cart')->insertGetId([
+         'userid'=>$uid,
+         'usertype'=>$user_type,
+         'product_id'=>$product_id,
+         'product_attr_id'=>$product_attr_id,
+         'qty'=>$pqty,
+         'added_on'=>date('Y-m-d h:i:s')
+      ]);
+      $msg = "Added On";
+     }
+     return response()->json(['msg'=>$msg, 'user_id'=>$uid, 'user_type'=>$user_type, 'qty'=>$pqty, 'product_id'=>$product_id, 'product_attr_id'=>$product_attr_id]);
+   }
+
+   public function cart(Request $request){
+      if($request->session()->has('FRONT_USER_LOGIN')){
+         $uid = $request->session()->get('USER_LOGIN');
+         $user_type = "Reg";
+      }else{
+         $uid = getrandomuserid();
+         $user_type = "Not-Reg";
+      }
+
+     $result['list'] = DB::table('cart')
+      ->leftjoin('products','products.id','=','cart.product_id')
+      ->leftjoin('product_attr','product_attr.id','=','cart.product_attr_id')
+      ->leftjoin('sizes','sizes.id','=','product_attr.size_id')
+      ->leftjoin('colores','colores.id','=','product_attr.color_id')
+      ->where(['userid'=>$uid])
+      ->where(['usertype'=>$user_type])
+      ->select('products.name', 'products.image', 'cart.qty', 'sizes.size','colores.color', 'product_attr.price', 'products.slug')
+      ->get();
+   //  prx($result);
+
+      return view('front.cart', $result);
+   }
+
 }

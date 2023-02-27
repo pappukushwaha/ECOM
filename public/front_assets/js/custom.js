@@ -358,10 +358,10 @@ jQuery(function($){
 });
 
 
-function change_product_color_image(img){
+function change_product_color_image(img, colorname){
   jQuery('.simpleLens-big-image-container').html('<a data-big-image="'+img+'" data-lens-image="'+img+'" class="simpleLens-lens-image" href="#">  <img src="'+img+'" class="simpleLens-big-image"></a>')
   // jQuery('#color_id').val(color);
-
+ jQuery('#color_id').val(colorname);
 }
 
 function showColor(size){
@@ -371,3 +371,40 @@ function showColor(size){
   jQuery('#size_'+size).css('border','1px solid #000');
   jQuery('#size_id').val(size);
 }
+
+function how_to_add_cart(id, size, color){
+  jQuery('#color_id').val(color);
+  jQuery('#size_id').val(size);
+  add_to_cart(id);
+
+}
+
+function add_to_cart(id){
+ jQuery('.add_to_cart_msg').html('');
+ var color_id = jQuery('#color_id').val();
+ var size_id = jQuery('#size_id').val();
+ if(size_id == ''){
+  jQuery('.add_to_cart_msg').html('Please Select Size');
+  jQuery('.add_to_cart_msg').css('color', 'red');
+ }else if(color_id == ''){
+  jQuery('.add_to_cart_msg').html('Please Select Color');
+  jQuery('.add_to_cart_msg').css('color', 'red');
+ }else{
+  jQuery('#product_id').val(id);
+  jQuery('#pqty').val(jQuery('#qty').val());
+  jQuery.ajax({ 
+    url:'/add_to_cart',
+    data:jQuery('#frmAddToCart').serialize(),
+    type:'post',
+    success: function(result){
+      alert('Product ' +result.msg);
+    }
+  })
+ }
+
+
+}
+ 
+  function updateqt(){
+    alert('hjel;');
+  }

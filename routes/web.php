@@ -1,6 +1,4 @@
 <?php
-
-//Back End Route
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryControll;
 use App\Http\Controllers\Admin\CouponControll;
@@ -10,10 +8,8 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\TaxsController;
 use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\HomeBannerController;
 use Illuminate\Support\Facades\Route;
 
-//Front End Route
 use App\Http\Controllers\Front\FrontController;
 
 
@@ -54,14 +50,6 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::post('category_updatedata/{id}', [CategoryControll::class, 'updatedata']);
     Route::get('category_delete/{id}', [CategoryControll::class, 'delete']);
     Route::get('status_update/{status}/{category_id}', [CategoryControll::class, 'status']);
-
-    Route::get('homeBanner', [HomeBannerController::class, 'index']);
-    Route::get('homeBanner_add', [HomeBannerController::class, 'homeBanner_add']);
-    Route::post('homeBanner_insert', [HomeBannerController::class, 'insert'])->name('homeBanner_insert');
-    Route::get('homeBanner_update/{id}', [HomeBannerController::class, 'update']);
-    Route::post('homeBanner_updatedata/{id}', [HomeBannerController::class, 'updatedata']);
-    Route::get('homeBanner_delete/{id}', [HomeBannerController::class, 'delete']);
-    Route::get('status_update_homeBanner/{status}/{homeBanner_id}', [HomeBannerController::class, 'status']);
 
     Route::get('coupon', [CouponControll::class, 'index']);
     Route::get('coupon_add', [CouponControll::class, 'coupon_add']);
@@ -124,9 +112,5 @@ Route::group(['middleware'=>'admin_auth'], function(){
 //From End Route Set Start
 
 Route::get('/',[FrontController::class, 'index']);
-Route::get('/product/{slug}',[FrontController::class, 'product']);
-Route::post('add_to_cart', [FrontController::class, 'add_to_cart']);
-Route::get('cart', [FrontController::class, 'cart']);
-
 
 //From End Route Set End

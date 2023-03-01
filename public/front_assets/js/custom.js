@@ -397,14 +397,57 @@ function add_to_cart(id){
     data:jQuery('#frmAddToCart').serialize(),
     type:'post',
     success: function(result){
-      alert('Product ' +result.msg);
+      alert('Product ' +result.msg+ ' '+ id);
+      totalprice = 0;
+      if(result.totalcart == 0){
+         jQuery('.aa-cart-notify').html('0');
+         jQuery('.aa-cartbox-summary').remove();
+      }else{
+        jQuery('.aa-cart-notify').html(result.totalcart)  ;
+        var html = '<ul>';
+        jQuery.each(result.data, function(arrKey, arrVal){
+         totalprice = parseInt(totalprice)+(parseInt(arrVal.qty)* parseInt(arrVal.price));
+         html += ' <li><a class="aa-cartbox-img" href="#"><img src="'+PRODUCT_IMAGE+'/'+arrVal.image+'" alt="img"></a><div class="aa-cartbox-info"><h4><a href="#">'+arrVal.name+'</a></h4><p>'+arrVal.qty+' x Rs '+arrVal.price+'</p></div><a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a></li>';
+        });
+      }
+      html +=' <li><span class="aa-cartbox-total-title">Total</span><span class="aa-cartbox-total-price">Rs '+totalprice+'</span></li>';
+      html +='</ul>';
+      html +='<a class="aa-cartbox-checkout aa-primary-btn" href="checkout">Checkout</a>';
+      jQuery('.aa-cartbox-summary').html(html);
     }
-  })
+  });
  }
-
+ 
 
 }
  
-  function updateqt(){
-    alert('hjel;');
+  function updateqt(pid, size, color, attrid, price){
+  jQuery('#color_id').val(color);
+  jQuery('#size_id').val(size);
+  jQuery('#qty').val(jQuery('#qty'+attrid).val());
+  jQuery('#qty'+attrid).val(jQuery('#qty'+attrid).val());
+  var qty = jQuery('#qty'+attrid).val();
+  add_to_cart(pid);
+  jQuery('#total_price_'+attrid).html('Rs - ' +qty*price);
   }
+
+  function deleteproductcart(pid, size, color, attrid){
+    jQuery('#color_id').val(color);
+    jQuery('#size_id').val(size);
+    jQuery('#qty').val(0);
+    jQuery('#qty'+attrid).val(0);
+    // var qty = jQuery('#qty'+attrid).val();
+    add_to_cart(pid);
+    // jQuery('#total_price_'+attrid).html('Rs - ' +qty*price);
+    jQuery('#card_box_'+attrid).hide();
+    }
+
+
+    function add_to_cart_cat(id, size, color){
+      jQuery('#color_id').val(color);
+      jQuery('#size_id').val(size);
+      // alert(id+size+color)
+      add_to_cart(id);
+    
+    }
+  

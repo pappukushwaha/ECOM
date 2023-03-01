@@ -4,8 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
-    <title>@yield('tittle')</title>
-    
+    <title>@yield('page_title')</title>
     <link href="{{asset('front_assets/css/font-awesome.css')}}" rel="stylesheet">
     <link href="{{asset('front_assets/css/bootstrap.css')}}" rel="stylesheet">   
     <link href="{{asset('front_assets/css/jquery.smartmenus.bootstrap.css')}}" rel="stylesheet">
@@ -15,13 +14,22 @@
     <link id="switcher" href="{{asset('front_assets/css/theme-color/default-theme.css')}}" rel="stylesheet">
     <link href="{{asset('front_assets/css/sequence-theme.modern-slide-in.css')}}" rel="stylesheet" media="all">
     <link href="{{asset('front_assets/css/style.css')}}" rel="stylesheet">    
+
+    <!-- Google Font -->
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  
+      
+    <script>
+    var PRODUCT_IMAGE="{{asset('storage/media/')}}";
+    </script>
 
   </head>
   <body> 
@@ -47,35 +55,7 @@
             <div class="aa-header-top-area">
               <!-- start header top left -->
               <div class="aa-header-top-left">
-                <!-- start language -->
-                <div class="aa-language">
-                  <div class="dropdown">
-                    <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                      <img src="   {{asset('front_assets/img/flag/english.jpg')}}" alt="english flag">ENGLISH
-                      <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#"><img src="{{asset('front_assets/img/flag/french.jpg')}}" alt="">FRENCH</a></li>
-                        <li><a href="#"><img src="{{asset('front_assets/img/flag/english.jpg')}}" alt="">ENGLISH</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <!-- / language -->
-
-                <!-- start currency -->
-                <div class="aa-currency">
-                  <div class="dropdown">
-                    <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                      <i class="fa fa-usd"></i>USD
-                      <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                      <li><a href="#"><i class="fa fa-euro"></i>EURO</a></li>
-                      <li><a href="#"><i class="fa fa-jpy"></i>YEN</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <!-- / currency -->
+                
                 <!-- start cellphone -->
                 <div class="cellphone hidden-xs">
                   <p><span class="fa fa-phone"></span>00-62-658-658</p>
@@ -85,10 +65,10 @@
               <!-- / header top left -->
               <div class="aa-header-top-right">
                 <ul class="aa-head-top-nav-right">
-                  <li><a href="account.html">My Account</a></li>
-                  <li class="hidden-xs"><a href="wishlist.html">Wishlist</a></li>
+                  <li><a href="javascript:void(0)">My Account</a></li>
+                  
                   <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
-                  <li class="hidden-xs"><a href="checkout.html">Checkout</a></li>
+                  <li class="hidden-xs"><a href="javascript:void(0)">Checkout</a></li>
                   <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
                 </ul>
               </div>
@@ -113,44 +93,50 @@
                   <p>daily<strong>Shop</strong> <span>Your Shopping Partner</span></p>
                 </a>
                 <!-- img based logo -->
-                <!-- <a href="index.html"><img src="img/logo.jpg" alt="logo img"></a> -->
+                <!-- <a href="javascript:void(0)"><img src="img/logo.jpg" alt="logo img"></a> -->
               </div>
               <!-- / logo  -->
                <!-- cart box -->
+              @php
+              $getAddToCartTotalItem=getAddToCartTotalItem();
+              $totalCartItem=count($getAddToCartTotalItem);
+              $totalPrice=0;
+              @endphp 
               <div class="aa-cartbox">
-                <a class="aa-cart-link" href="#">
+                <a class="aa-cart-link" href="#" id="cartBox">
                   <span class="fa fa-shopping-basket"></span>
                   <span class="aa-cart-title">SHOPPING CART</span>
-                  <span class="aa-cart-notify">2</span>
+                  <span class="aa-cart-notify">{{$totalCartItem}}</span>
                 </a>
                 <div class="aa-cartbox-summary">
+               @if($totalCartItem>0)
+                
                   <ul>
+                    @foreach($getAddToCartTotalItem as $cartItem)
+
+                    @php
+                    $totalPrice=$totalPrice+($cartItem->qty*$cartItem->price)
+                    @endphp
                     <li>
-                      <a class="aa-cartbox-img" href="#"><img src="{{asset('front_assets/img/woman-small-2.jpg')}}" alt="img"></a>
+                      <a class="aa-cartbox-img" href="#"><img src="{{asset('storage/media/'.$cartItem->image)}}" alt="img"></a>
                       <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
+                        <h4><a href="#">{{$cartItem->name}}</a></h4>
+                        <p>{{$cartItem->qty}} * Rs {{$cartItem->price}}</p>
                       </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
                     </li>
-                    <li>
-                      <a class="aa-cartbox-img" href="#"><img src="{{asset('front_assets/img/woman-small-1.jpg')}}" alt="img"></a>
-                      <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
-                      </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>                    
+                    @endforeach                  
                     <li>
                       <span class="aa-cartbox-total-title">
                         Total
                       </span>
                       <span class="aa-cartbox-total-price">
-                        $500
+                        Rs {{$totalPrice}}
                       </span>
                     </li>
                   </ul>
-                  <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.html">Checkout</a>
+                  <a class="aa-cartbox-checkout aa-primary-btn" href="{{url('/checkout')}}">Checkout</a>
+               
+                @endif
                 </div>
               </div>
               <!-- / cart box -->
@@ -184,20 +170,21 @@
               <span class="icon-bar"></span>
             </button>          
           </div>
+          
           <div class="navbar-collapse collapse">
             <!-- Left nav -->
-           
-              {!! getTopNavCat() !!}
-            
-           
+            {!! getTopNavCat() !!}
           </div><!--/.nav-collapse -->
         </div>
       </div>       
     </div>
   </section>
   <!-- / menu -->
- @section('container')
- @show
+  <!-- Start slider -->
+  
+  @section('container')
+  @show      
+  
   <!-- footer -->  
   <footer id="aa-footer">
     <!-- footer bottom -->
@@ -308,7 +295,7 @@
             <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme"> Remember me </label>
             <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
             <div class="aa-register-now">
-              Don't have an account?<a href="account.html">Register now!</a>
+              Don't have an account?<a href="javascript:void(0)">Register now!</a>
             </div>
           </form>
         </div>                        
@@ -318,24 +305,15 @@
 
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="{{asset('front_assets/js/bootstrap.js')}}"></script>  
-  <!-- SmartMenus jQuery plugin -->
   <script type="text/javascript" src="{{asset('front_assets/js/jquery.smartmenus.js')}}"></script>
-  <!-- SmartMenus jQuery Bootstrap Addon -->
   <script type="text/javascript" src="{{asset('front_assets/js/jquery.smartmenus.bootstrap.js')}}"></script>  
-  <!-- To Slider JS -->
   <script src="{{asset('front_assets/js/sequence.js')}}"></script>
   <script src="{{asset('front_assets/js/sequence-theme.modern-slide-in.js')}}"></script>  
-  <!-- Product view slider -->
   <script type="text/javascript" src="{{asset('front_assets/js/jquery.simpleGallery.js')}}"></script>
   <script type="text/javascript" src="{{asset('front_assets/js/jquery.simpleLens.js')}}"></script>
-  <!-- slick slider -->
   <script type="text/javascript" src="{{asset('front_assets/js/slick.js')}}"></script>
-  <!-- Price picker slider -->
   <script type="text/javascript" src="{{asset('front_assets/js/nouislider.js')}}"></script>
-  <!-- Custom js -->
   <script src="{{asset('front_assets/js/custom.js')}}"></script> 
-
   </body>
 </html>

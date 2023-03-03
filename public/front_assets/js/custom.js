@@ -501,10 +501,33 @@ function add_to_cart(id){
           if(result.status == 'error'){
             jQuery.each(result.error, function(key, val){
               jQuery('#'+key+"_error").html(val[0]);
-              console.log(key);
-              console.log(val);
             })
+          }
+          if(result.status == 'success'){
+            jQuery("#frmregistration")[0].reset();
+            jQuery('#success_reg_msg').html(result.msg);
           }
         }
       });
     })
+
+
+    jQuery('#frmlogin').submit(function(e){
+      e.preventDefault();
+      jQuery('.field_error').html('');
+      jQuery.ajax({
+        url:'login_process',
+        data:jQuery("#frmlogin").serialize(),
+        type:'POST',
+        success:function(result){
+          console.log(result);
+          // if(result.status == 'error'){
+          // }
+          // if(result.status == 'success'){
+          //   jQuery("#frmlogin")[0].reset();
+          //   jQuery('#success_reg_msg').html(result.msg);
+          // }
+        }
+      });
+    })
+    

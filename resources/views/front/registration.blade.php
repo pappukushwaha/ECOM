@@ -28,9 +28,10 @@
                    <p class="errorrs"><span id="mobile_error" class="field_error"></span></p>
 
                    @csrf
-                   <button type="submit" id="btnregistration" class="aa-browse-btn">Register</button>                    
-                 </form>
-               </div>
+                   <button type="submit" id="btnregistration" class="aa-browse-btn">Register</button>  
+                  </form>
+                </div>
+                <p class="errorrs"><span id="success_reg_msg" class="field_error"></span></p>
              </div>
            </div>          
         </div>

@@ -285,11 +285,12 @@
         <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4>Login or Register</h4>
-          <form class="aa-login-form" action="">
-            <label for="">Username or Email address<span>*</span></label>
-            <input type="text" placeholder="Username or email">
+          <form class="aa-login-form" id="frmlogin">
+            @csrf
+            <label for=""> Email address<span>*</span></label>
+            <input type="text" name="email_login" placeholder="Email">
             <label for="">Password<span>*</span></label>
-            <input type="password" placeholder="Password">
+            <input type="password" name="password_login" placeholder="Password">
             <button class="aa-browse-btn" type="submit">Login</button>
             <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme"> Remember me </label>
             <p class="aa-lost-password"><a href="#">Lost your password?</a></p>

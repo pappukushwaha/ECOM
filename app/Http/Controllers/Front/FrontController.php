@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 // use Illuminate\Http\Request;
 use Validator;
 use App\Http\Requests;
-// use Validator;
+use Crypt;
 
 class FrontController extends Controller
 {
@@ -310,17 +310,7 @@ class FrontController extends Controller
     }
 
     public function search(Request $request, $str){
-        // $result['product']=
-        //     DB::table('products')
-        //     ->where(['status'=>1])
-        //     ->where('name','like',"%$str%")
-        //     ->orwhere('brand','like',"%$str%")
-        //     ->orwhere('model','like',"%$str%")
-        //     ->orwhere('short_desc','like',"%$str%")
-        //     ->orwhere('desc','like',"%$str%")
-        //     ->orwhere('keywords','like',"%$str%")
-        //     ->orwhere('technical_specification','like',"%$str%")
-        //     ->get();
+       
             $query=DB::table('products');
             $query=$query->leftJoin('categories','categories.id','=','products.category_id');
             $query=$query->leftJoin('product_attr','products.id','=','product_attr.product_id');
@@ -360,7 +350,7 @@ class FrontController extends Controller
             'name' => 'required',
             'email'=>'required|email|unique:customers,email',
             'password' => 'required',
-            'mobile'=>'required',
+            'mobile'=>'required|digits:10',
         ]);
         if(!$valid->passes()){
             return response()->json(['status'=>'error', 'error'=>$valid->errors()->toArray()]);
@@ -368,7 +358,7 @@ class FrontController extends Controller
             $arr=[
              "name"=>$request->name,
              "email"=>$request->email,
-             "password"=>$request->password,
+             "password"=>Crypt::encrypt($request->password),
              "mobile"=>$request->mobile,
              "status"=>1,
              "created_at"=>date('Y-m-d h:i:s'),
@@ -377,9 +367,24 @@ class FrontController extends Controller
 
             $query = DB::table('customers')->insert($arr);
             if($query){
-                return response()->json(['status'=>'success', 'msg'=>'register successfull']);
+                return response()->json(['status'=>'success', 'msg'=>'Registration Successfully']);
             }
         }
+    }
+
+    public function login_process(Request $request){
+        
+            //  Crypt::decrypt($request->password);
+            $result=DB::table('customers')
+            ->where(['email'=>$request->email_login])
+            ->get();  
+            if(isset($result[0])){
+                echo "success";
+            }else{
+                echo "failled";
+            }
+                return response()->json(['status'=>'success', 'msg'=>'Registration Successfully']);
+        
     }
     
 }

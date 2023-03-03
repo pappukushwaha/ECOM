@@ -68,6 +68,10 @@
                             <a href="{{url('coupon')}}">
                                 <i class="fas fa-tag"></i>Coupon</a>
                         </li>
+                        <li class="@yield('homeBanner_selected')">
+                            <a href="{{url('homeBanner')}}">
+                                <i class="fas fa-home"></i>Home Banner</a>
+                        </li>
 
                         <li class="@yield('size_selected')">
                             <a href="{{url('size')}}">
@@ -121,6 +125,10 @@
                             <li class="@yield('coupon_selected')">
                                 <a href="{{url('coupon')}}">
                                     <i class="fas fa-tag"></i>Coupon</a>
+                            </li>
+                            <li class="@yield('homeBanner_selected')">
+                                <a href="{{url('homeBanner')}}">
+                                    <i class="fas fa-home"></i>Home Banner</a>
                             </li>
                             <li class="@yield('size_selected')">
                                 <a href="{{url('size')}}">

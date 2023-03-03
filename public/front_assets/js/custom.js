@@ -240,23 +240,29 @@ jQuery(function($){
     jQuery(function(){
       if($('body').is('.productPage')){
        var skipSlider = document.getElementById('skipstep');
+       var filter_price_start = jQuery("#filter_price_start").val();
+       var filter_price_end = jQuery("#filter_price_end").val();
+       if(filter_price_start == '' || filter_price_end ==''){
+        filter_price_start = 100;
+        filter_price_end = 1500;
+       }
         noUiSlider.create(skipSlider, {
             range: {
                 'min': 0,
-                '10%': 10,
-                '20%': 20,
-                '30%': 30,
-                '40%': 40,
-                '50%': 50,
-                '60%': 60,
-                '70%': 70,
-                '80%': 80,
-                '90%': 90,
-                'max': 100
+                '10%': 100,
+                '20%': 300,
+                '30%': 500,
+                '40%': 700,
+                '50%': 900,
+                '60%': 1100,
+                '70%': 1300,
+                '80%': 1500,
+                '90%': 1700,
+                'max': 1900
             },
             snap: true,
             connect: true,
-            start: [20, 70]
+            start: [filter_price_start, filter_price_end]
         });
         // for value print
         var skipValues = [
@@ -357,3 +363,148 @@ jQuery(function($){
     
 });
 
+
+function change_product_color_image(img, colorname){
+  jQuery('.simpleLens-big-image-container').html('<a data-big-image="'+img+'" data-lens-image="'+img+'" class="simpleLens-lens-image" href="#">  <img src="'+img+'" class="simpleLens-big-image"></a>')
+  // jQuery('#color_id').val(color);
+ jQuery('#color_id').val(colorname);
+}
+
+function showColor(size){
+  jQuery('.product_color').hide();
+  jQuery('.size_border').css('border', '1px solid #ddd');
+  jQuery('.size_'+size).show();
+  jQuery('#size_'+size).css('border','1px solid #000');
+  jQuery('#size_id').val(size);
+}
+
+function home_add_to_cart(id, size, color){
+  jQuery('#color_id').val(color);
+  jQuery('#size_id').val(size);
+  add_to_cart(id);
+
+}
+
+function add_to_cart(id){
+ jQuery('.add_to_cart_msg').html('');
+ var color_id = jQuery('#color_id').val();
+ var size_id = jQuery('#size_id').val();
+ if(size_id == ''){
+  jQuery('.add_to_cart_msg').html('Please Select Size');
+  jQuery('.add_to_cart_msg').css('color', 'red');
+ }else if(color_id == ''){
+  jQuery('.add_to_cart_msg').html('Please Select Color');
+  jQuery('.add_to_cart_msg').css('color', 'red');
+ }else{
+  jQuery('#product_id').val(id);
+  jQuery('#pqty').val(jQuery('#qty').val());
+  jQuery.ajax({ 
+    url:'/add_to_cart',
+    data:jQuery('#frmAddToCart').serialize(),
+    type:'post',
+    success: function(result){
+      alert('Product ' +result.msg);
+      totalprice = 0;
+      if(result.totalcart == 0){
+         jQuery('.aa-cart-notify').html('0');
+         jQuery('.aa-cartbox-summary').remove();
+      }else{
+        jQuery('.aa-cart-notify').html(result.totalcart)  ;
+        var html = '<ul>';
+        jQuery.each(result.data, function(arrKey, arrVal){
+         totalprice = parseInt(totalprice)+(parseInt(arrVal.qty)* parseInt(arrVal.price));
+         html += ' <li><a class="aa-cartbox-img" href="#"><img src="'+PRODUCT_IMAGE+'/'+arrVal.image+'" alt="img"></a><div class="aa-cartbox-info"><h4><a href="#">'+arrVal.name+'</a></h4><p>'+arrVal.qty+' x Rs '+arrVal.price+'</p></div><a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a></li>';
+        });
+      }
+      html +=' <li><span class="aa-cartbox-total-title">Total</span><span class="aa-cartbox-total-price">Rs '+totalprice+'</span></li>';
+      html +='</ul>';
+      html +='<a class="aa-cartbox-checkout aa-primary-btn" href="checkout">Checkout</a>';
+      jQuery('.aa-cartbox-summary').html(html);
+    }
+  });
+ }
+ 
+
+}
+ 
+  function updateQty(pid, size, color, attrid, price){
+  jQuery('#color_id').val(color);
+  jQuery('#size_id').val(size);
+  jQuery('#qty').val(jQuery('#qty'+attrid).val());
+  jQuery('#qty'+attrid).val(jQuery('#qty'+attrid).val());
+  var qty = jQuery('#qty'+attrid).val();
+  add_to_cart(pid);
+  jQuery('#total_price_'+attrid).html('Rs - ' +qty*price);
+  }
+
+  function deleteCartProduct(pid, size, color, attrid){
+    jQuery('#color_id').val(color);
+    jQuery('#size_id').val(size);
+    jQuery('#qty').val(0);
+    jQuery('#qty'+attrid).val(0);
+    // var qty = jQuery('#qty'+attrid).val();
+    // alert(pid+' '+attrid+' '+size+' '+color);
+    add_to_cart(pid);
+    // jQuery('#total_price_'+attrid).html('Rs - ' +qty*price);
+    jQuery('#cart_box_'+attrid).hide();
+    }
+
+
+    function add_to_cart_cat(id, size, color){
+      jQuery('#color_id').val(color);
+      jQuery('#size_id').val(size);
+      // alert(id+size+color)
+      add_to_cart(id);
+    
+    }
+
+    function sort_by(){
+      var sort_by_value=jQuery('#sort_by_value').val();
+      jQuery('#sort').val(sort_by_value);
+      jQuery('#categoryFilter').submit();
+    }
+  
+
+    function sort_price_filter(){
+      jQuery("#filter_price_start").val(jQuery('#skip-value-lower').html());
+      jQuery("#filter_price_end").val(jQuery('#skip-value-upper').html());
+      jQuery('#categoryFilter').submit();
+
+    }
+
+    function setColor(color, type){
+      var color_str = jQuery('#color_filter').val();
+      if(type == 1){
+        var new_color_str = color_str.replace(color+":", "");
+        jQuery('#color_filter').val(new_color_str);
+      }else{
+        jQuery('#color_filter').val(color+':'+color_str);
+      }
+      jQuery('#categoryFilter').submit()
+    }
+
+    function FunSearch(){
+      var search_str = jQuery('#search_str').val();
+      if(search_str != '' && search_str.length>2){
+        window.location.href="/search/"+search_str;
+      }
+    }
+
+    jQuery('#frmregistration').submit(function(e){
+      e.preventDefault();
+      jQuery('.field_error').html('');
+      jQuery.ajax({
+        url:'registration_process',
+        data:jQuery("#frmregistration").serialize(),
+        type:'POST',
+        success:function(result){
+          if(result.status == 'error'){
+            jQuery.each(result.error, function(key, val){
+              jQuery('#'+key+"_error").html(val[0]);
+              console.log(key);
+              console.log(val);
+            })
+          }
+        }
+      });
+    })

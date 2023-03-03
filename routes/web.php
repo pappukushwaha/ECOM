@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ColorControll;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\TaxsController;
+use App\Http\Controllers\Admin\HomeBannerController;
 use App\Http\Controllers\Admin\CustomerController;
 use Illuminate\Support\Facades\Route;
 
@@ -104,6 +105,15 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::get('customer', [CustomerController::class, 'index']);
     Route::get('status_update_customer/{status}/{customer_id}', [CustomerController::class, 'status']);
     Route::get('customer_show/{customer_id}', [CustomerController::class, 'show']);
+
+    Route::get('homeBanner', [HomeBannerController::class, 'index']);
+    Route::get('homeBanner_add', [HomeBannerController::class, 'homeBanner_add']);
+    Route::post('homeBanner_insert', [HomeBannerController::class, 'insert'])->name('homeBanner_insert');
+    Route::get('homeBanner_update/{id}', [HomeBannerController::class, 'update']);
+    Route::post('homeBanner_updatedata/{id}', [HomeBannerController::class, 'updatedata']);
+    Route::get('homeBanner_delete/{id}', [HomeBannerController::class, 'delete']);
+    Route::get('status_update_homeBanner/{status}/{homeBanner_id}', [HomeBannerController::class, 'status']);
+    
 });
 
 //Admin Route Set End 
@@ -112,5 +122,13 @@ Route::group(['middleware'=>'admin_auth'], function(){
 //From End Route Set Start
 
 Route::get('/',[FrontController::class, 'index']);
+Route::get('category/{id}',[FrontController::class,'category']);
+Route::get('product/{id}',[FrontController::class,'product']);
+Route::post('add_to_cart',[FrontController::class,'add_to_cart']);
+Route::get('cart',[FrontController::class,'cart']);
+Route::get('search/{str}',[FrontController::class,'search']);
+Route::get('registration',[FrontController::class,'registration']);
+Route::post('registration_process',[FrontController::class,'registration_process']);
+
 
 //From End Route Set End

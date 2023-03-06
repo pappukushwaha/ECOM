@@ -513,20 +513,22 @@ function add_to_cart(id){
 
 
     jQuery('#frmlogin').submit(function(e){
+      jQuery('#login_msg').html('');
       e.preventDefault();
       jQuery('.field_error').html('');
       jQuery.ajax({
-        url:'login_process',
+        url:'/login_process',
         data:jQuery("#frmlogin").serialize(),
         type:'POST',
         success:function(result){
           console.log(result);
-          // if(result.status == 'error'){
-          // }
-          // if(result.status == 'success'){
-          //   jQuery("#frmlogin")[0].reset();
-          //   jQuery('#success_reg_msg').html(result.msg);
-          // }
+          if(result.status == 'error'){
+            jQuery('#login_msg').html(result.msg);
+          }
+          if(result.status == 'success'){
+            window.location.href='/';
+            alert(result.msg);
+          }
         }
       });
     })

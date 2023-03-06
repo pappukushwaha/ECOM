@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Validator;
 use App\Http\Requests;
 use Crypt;
+use Mail;
 
 class FrontController extends Controller
 {
@@ -341,7 +342,10 @@ class FrontController extends Controller
         return view('front.search',$result);
     }
 
-    public function registration(){
+    public function registration(Request $request){
+        if($request->session()->has('FRONT_USER_LOGIN')){
+            return redirect('/');
+        }
         return view('front.registration');
     }
 
@@ -355,35 +359,61 @@ class FrontController extends Controller
         if(!$valid->passes()){
             return response()->json(['status'=>'error', 'error'=>$valid->errors()->toArray()]);
         }else{
+            $rand_id = rand(111111111, 999999999);
             $arr=[
              "name"=>$request->name,
              "email"=>$request->email,
              "password"=>Crypt::encrypt($request->password),
              "mobile"=>$request->mobile,
              "status"=>1,
+             "is_verify"=>0,
+             "rand_id"=>$rand_id,
              "created_at"=>date('Y-m-d h:i:s'),
              "updated_at"=>date('Y-m-d h:i:s'),
             ];
 
             $query = DB::table('customers')->insert($arr);
             if($query){
-                return response()->json(['status'=>'success', 'msg'=>'Registration Successfully']);
+                $data=['name'=>$request->name, 'rand_id'=>$rand_id];
+                $user['to']=$request->email;
+                Mail::send('front.email_verification', $data, function($message) use ($user){
+                  $message->to($user['to']);
+                  $message->subject('Email Id Verification');
+                });
+                return response()->json(['status'=>'success', 'msg'=>'Registration Successfully. Please check your email id for verification']);
             }
         }
     }
 
     public function login_process(Request $request){
-        
-            //  Crypt::decrypt($request->password);
+            // prx($_POST);
             $result=DB::table('customers')
             ->where(['email'=>$request->email_login])
             ->get();  
             if(isset($result[0])){
-                echo "success";
+                $db_pwd=Crypt::decrypt($result[0]->password);
+                if($db_pwd == $request->password_login){
+                    if($request->rememberme===null){
+                        setcookie('login_email',$request->email_login, 100);
+                        setcookie('login_password',$request->password_login, 100);
+                    }else{
+                        setcookie('login_email',$request->email_login, time()+60*60*24*365);
+                        setcookie('login_password',$request->password_login, time()+60*60*24*365);
+                    }
+                     $request->session()->put('FRONT_USER_LOGIN', true);
+                     $request->session()->put('FRONT_USER_NAME', $result[0]->name);
+                     $request->session()->put('FRONT_USER_ID', $result[0]->id);
+                    $status="success";
+                    $msg="Registration Successfully";
+                }else{
+                    $status="error";
+                    $msg="Please enter valid password";
+                }
             }else{
-                echo "failled";
+                $status="error";
+                $msg="Please enter valid email Id";
             }
-                return response()->json(['status'=>'success', 'msg'=>'Registration Successfully']);
+                return response()->json(['status'=>$status, 'msg'=>$msg]);
         
     }
     

@@ -69,7 +69,11 @@
                   
                   <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
                   <li class="hidden-xs"><a href="javascript:void(0)">Checkout</a></li>
-                  <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                  @if (session()->has('FRONT_USER_LOGIN'))
+                  <li><a href="/user_logout" data-toggle="modal">Logout</a></li>
+                  @else
+                  <li><a href="javascript:void(0)" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                  @endif
                 </ul>
               </div>
             </div>
@@ -277,7 +281,18 @@
     </div>
   </footer>
   <!-- / footer -->
-
+  @php
+      if (isset($_COOKIE['login_email']) && isset($_COOKIE['login_password'])){
+          $login_email = $_COOKIE['login_email'];
+          $login_password = $_COOKIE['login_password'];
+          $is_remember = "checked='checked'";
+      }else{
+        $login_email = '';
+          $login_password = '';
+          $is_remember = "";
+      }
+      
+  @endphp
   <!-- Login Modal -->  
   <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -288,15 +303,17 @@
           <form class="aa-login-form" id="frmlogin">
             @csrf
             <label for=""> Email address<span>*</span></label>
-            <input type="text" name="email_login" placeholder="Email">
+            <input type="text" name="email_login" placeholder="Email" value="{{$login_email}}">
             <label for="">Password<span>*</span></label>
-            <input type="password" name="password_login" placeholder="Password">
+            <input type="password" name="password_login" placeholder="Password" value="{{$login_password}}">
             <button class="aa-browse-btn" type="submit">Login</button>
-            <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme"> Remember me </label>
+            <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme" name="rememberme" {{$is_remember}} > Remember me </label>
+            <div style="clear:both; color:red;" id="login_msg"></div>
             <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
             <div class="aa-register-now">
-              Don't have an account?<a href="javascript:void(0)">Register now!</a>
+              Don't have an account?<a href="/registration">Register now!</a>
             </div>
+           
           </form>
         </div>                        
       </div><!-- /.modal-content -->

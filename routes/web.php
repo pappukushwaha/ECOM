@@ -130,6 +130,11 @@ Route::get('search/{str}',[FrontController::class,'search']);
 Route::get('registration',[FrontController::class,'registration']);
 Route::post('registration_process',[FrontController::class,'registration_process']);
 Route::post('login_process',[FrontController::class,'login_process']);
-
+Route::get('/user_logout', function(){
+    session()->forget('FRONT_USER_LOGIN');
+    session()->forget('FRONT_USER_NAME');
+    session()->forget('FRONT_USER_ID');
+    return redirect('/');
+} );
 
 //From End Route Set End

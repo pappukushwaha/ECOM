@@ -392,6 +392,14 @@ class FrontController extends Controller
             ->get();  
             if(isset($result[0])){
                 $db_pwd=Crypt::decrypt($result[0]->password);
+                $status = $result[0]->status;
+                $is_verify = $result[0]->is_verify;
+                if($is_verify == 0){
+                    return response()->json(['status'=>'error', 'msg'=>'Please Verify Your Email']);
+                }
+                if($status == 0){
+                    return response()->json(['status'=>'error', 'msg'=>'Your Account has Deactivated']);
+                }
                 if($db_pwd == $request->password_login){
                     if($request->rememberme===null){
                         setcookie('login_email',$request->email_login, 100);
@@ -415,6 +423,56 @@ class FrontController extends Controller
             }
                 return response()->json(['status'=>$status, 'msg'=>$msg]);
         
+    }
+
+    public function email_verification(Request $request, $id){
+        $result=DB::table('customers')
+        ->where(['rand_id'=>$id])
+        ->get(); 
+        if(isset($result[0])){
+            $result=DB::table('customers')
+        ->where(['id'=>$result[0]->id])
+        ->update(['is_verify'=>1, 'rand_id'=>'']);
+        return view('front.verification');
+        }else{
+           return redirect("/");
+        }
+    }
+
+    public function forgot_password(Request $request){
+       $forgot_email = $request->email_forgot;
+       $result=DB::table('customers')
+            ->where(['email'=>$forgot_email])
+            ->get();
+            $rand_id = rand(111111111, 999999999);
+            if(isset($result[0])){
+                $results=DB::table('customers')
+                ->where(['email'=>$forgot_email])
+                ->update(['is_forgot'=>1, 'rand_id'=>$rand_id]);
+                $name = $result[0]->name;
+                $data=['rand_id'=>$rand_id, 'name'=>$name];
+                $user['to']=$request->email_forgot;
+                Mail::send('front.forgot_email', $data, function($message) use ($user){
+                  $message->to($user['to']);
+                  $message->subject('Forgot Password');
+                });
+                return response()->json(['status'=>'success', 'msg'=>'Please check your email id for change password']);
+
+            }else{
+                return response()->json(['status'=>'error', 'msg'=>'Your Email Id Not Register']);
+            }
+    }
+
+    public function forgot_password_change(Request $request, $id){
+        $result=DB::table('customers')
+        ->where(['rand_id'=>$id])
+        ->where(['is_forgot'=>1])
+        ->get(); 
+        if(isset($result[0])){
+        return view('front.forgot_password_change');
+        }else{
+           return redirect("/");
+        }
     }
     
 }

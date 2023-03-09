@@ -513,8 +513,8 @@ function add_to_cart(id){
 
 
     jQuery('#frmlogin').submit(function(e){
-      jQuery('#login_msg').html('');
       e.preventDefault();
+      jQuery('#login_msg').html('');
       jQuery('.field_error').html('');
       jQuery.ajax({
         url:'/login_process',
@@ -532,4 +532,36 @@ function add_to_cart(id){
         }
       });
     })
+
+
+    function forgot_password(){
+      jQuery('#popup_forgot').show();
+      jQuery('#popup_login').hide();
+    }
     
+    function login_back(){
+      jQuery('#popup_login').show();
+      jQuery('#popup_forgot').hide();
+    }
+
+
+    jQuery('#frmforgot').submit(function(e){
+      e.preventDefault();
+      jQuery('#login_msg').html('');
+      jQuery('.field_error').html('');
+      jQuery.ajax({
+        url:'/forgot_password',
+        data:jQuery("#frmforgot").serialize(),
+        type:'POST',
+        success:function(result){
+          console.log(result);
+          if(result.status == 'error'){
+            jQuery('#login_msg_forget').html(result.msg);
+          }
+          if(result.status == 'success'){
+            // window.location.href='/';
+            jQuery('#login_msg_forget').html(result.msg);
+          }
+        }
+      });
+    })

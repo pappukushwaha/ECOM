@@ -136,5 +136,9 @@ Route::get('/user_logout', function(){
     session()->forget('FRONT_USER_ID');
     return redirect('/');
 } );
+Route::get('verification/{id}',[FrontController::class,'email_verification']);
+Route::post('forgot_password',[FrontController::class,'forgot_password']);
+Route::get('forgot_password_change/{id}',[FrontController::class,'forgot_password_change']);
+
 
 //From End Route Set End

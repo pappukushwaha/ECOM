@@ -299,6 +299,7 @@
       <div class="modal-content">                      
         <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <div id="popup_login">
           <h4>Login or Register</h4>
           <form class="aa-login-form" id="frmlogin">
             @csrf
@@ -309,12 +310,28 @@
             <button class="aa-browse-btn" type="submit">Login</button>
             <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme" name="rememberme" {{$is_remember}} > Remember me </label>
             <div style="clear:both; color:red;" id="login_msg"></div>
-            <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
+            <p class="aa-lost-password"><a href="javascript:void(0)" onclick="forgot_password()">Lost your password?</a></p>
             <div class="aa-register-now">
               Don't have an account?<a href="/registration">Register now!</a>
             </div>
            
           </form>
+        </div>
+        <div id="popup_forgot" style="display:none">
+          <h4>Forgot Password</h4>
+          <form class="aa-login-form" id="frmforgot">
+            @csrf
+            <label for=""> Email address<span>*</span></label>
+            <input type="text" name="email_forgot" placeholder="Email" required>
+            <button class="aa-browse-btn" type="submit">Submit</button>
+            <div style="clear:both; color:red;" id="login_msg_forget"></div>
+            <div class="aa-register-now">
+              Login Form ?<a href="javascript:void(0)" onclick="login_back()">Login now!</a>
+            </div>
+           
+          </form>
+        </div>
+         
         </div>                        
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

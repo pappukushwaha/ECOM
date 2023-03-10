@@ -418,7 +418,7 @@ function add_to_cart(id){
       }
       html +=' <li><span class="aa-cartbox-total-title">Total</span><span class="aa-cartbox-total-price">Rs '+totalprice+'</span></li>';
       html +='</ul>';
-      html +='<a class="aa-cartbox-checkout aa-primary-btn" href="checkout">Checkout</a>';
+      html +='<a class="aa-cartbox-checkout aa-primary-btn" href="cart">Cart</a>';
       jQuery('.aa-cartbox-summary').html(html);
     }
   });
@@ -526,7 +526,7 @@ function add_to_cart(id){
             jQuery('#login_msg').html(result.msg);
           }
           if(result.status == 'success'){
-            window.location.href='/';
+            window.location.href=window.location.href;
             alert(result.msg);
           }
         }
@@ -547,8 +547,8 @@ function add_to_cart(id){
 
     jQuery('#frmforgot').submit(function(e){
       e.preventDefault();
-      jQuery('#login_msg').html('');
-      jQuery('.field_error').html('');
+      jQuery('#login_msg_forget').html('Please Wait...');
+      jQuery('.field_error').html('Please Wait...');
       jQuery.ajax({
         url:'/forgot_password',
         data:jQuery("#frmforgot").serialize(),
@@ -565,3 +565,71 @@ function add_to_cart(id){
         }
       });
     })
+
+    jQuery('#frmupdatepassword').submit(function(e){
+      e.preventDefault();
+      jQuery('#password_update_error').html('Please Wait...');
+      jQuery('.field_error').html('dsafadslkf;ajsldf;');
+      jQuery.ajax({
+        url:'/forgot_password_process',
+        data:jQuery("#frmupdatepassword").serialize(),
+        type:'POST',
+        success:function(result){
+         jQuery('#password_update_error').html(result.msg);
+        }
+      });
+    })
+
+    function applycouponcode(){
+      var coupon_code = jQuery('#coupon_code').val();
+      jQuery('#coupon_code_msg').html('');
+      jQuery('.coupon_code_box').addClass('hide');
+      jQuery('#coupon_code_show').html('');
+      if(coupon_code != ''){
+           jQuery.ajax({
+            url:'/apply_coupon_code',
+            data:'coupon_code='+coupon_code+'&_token='+jQuery("[name='_token']").val(),
+            type:'POST',
+            success:function(result){
+             
+              if(result.status == 'success'){
+                  jQuery('.coupon_code_box').removeClass('hide');
+                  jQuery('#coupon_code_show').html(coupon_code);
+                  jQuery('#coupon_code_msg').html(result.msg);
+                  jQuery('#show_total_price').html(result.amount);
+                  jQuery('.apply_coupon_code').hide();
+              }else{
+                  jQuery('#coupon_code_msg').html(result.msg);
+              }
+            }
+           })
+      }else{
+        jQuery('#coupon_code_msg').html('Please Enter Coupon Code');
+      }
+    }
+
+    function  remove_coupon_code(){
+      var coupon_code = jQuery('#coupon_code').val();
+      jQuery('#coupon_code').val('');
+      jQuery('#coupon_code_msg').html('');
+      jQuery('.coupon_code_box').addClass('hide');
+      jQuery('#coupon_code_show').html('');
+      if(coupon_code != ''){
+           jQuery.ajax({
+            url:'/remove_coupon_code',
+            data:'coupon_code='+coupon_code+'&_token='+jQuery("[name='_token']").val(),
+            type:'POST',
+            success:function(result){
+             
+              if(result.status == 'success'){
+                  jQuery('.coupon_code_box').addClass('hide');
+                  jQuery('#coupon_code_msg').html(result.msg);
+                  jQuery('#show_total_price').html(result.amount);
+                  jQuery('.apply_coupon_code').show();
+              }else{
+                  jQuery('#coupon_code_msg').html(result.msg);
+              }
+            }
+           })
+      }
+    }

@@ -134,11 +134,17 @@ Route::get('/user_logout', function(){
     session()->forget('FRONT_USER_LOGIN');
     session()->forget('FRONT_USER_NAME');
     session()->forget('FRONT_USER_ID');
+    session()->forget('USER_TEMP_ID');
     return redirect('/');
 } );
 Route::get('verification/{id}',[FrontController::class,'email_verification']);
 Route::post('forgot_password',[FrontController::class,'forgot_password']);
 Route::get('forgot_password_change/{id}',[FrontController::class,'forgot_password_change']);
+Route::post('forgot_password_process',[FrontController::class,'forgot_password_process']);
 
+
+Route::get('checkout',[FrontController::class,'checkout']);
+Route::post('apply_coupon_code',[FrontController::class,'apply_coupon_code']);
+Route::post('remove_coupon_code',[FrontController::class,'remove_coupon_code']);
 
 //From End Route Set End

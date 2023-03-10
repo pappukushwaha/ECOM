@@ -133,10 +133,31 @@ img {
   -o-transition: all 0.5s;
   transition: all 0.5s;
 }
+.aa-browse-btns{
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+  font-size: 16px;
+  padding: 8px 18px;
+  color: #fff;
+  background-color: #ff6666;
+  border: none;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+.aa-browse-btns:hover, .aa-browse-btns:focus  {
+  background-color: #fff;
+  color: #ff6666;
+  border: 1px solid #ff6666;
+}
 .aa-browse-btn span {
   margin-left: 5px;
 }
-.aa-browse-btn:hover, .aa-browse-btn:focus {
+.aa-browse-btn:hover, .aa-browse-btn:focus{
   background-color: #fff;
 }
 
@@ -4207,3 +4228,6 @@ img {
 color: #ff6666;
 }
 
+#coupon_code_msg{
+  color: #ff4b4b;
+}

@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col-md-12">
          <div class="checkout-area">
-           <form action="">
+           <form action="" id="placeOrderfrm" >
              <div class="row">
                <div class="col-md-8">
                  <div class="checkout-left">
@@ -28,7 +28,7 @@
                              </div>
                              <div class="col-md-4">
                                <div class="aa-checkout-single-bill">
-                                 <input type="email" placeholder="Email Address*" value="{{$customer_data['email']}}" name="=email" required >
+                                 <input type="email" placeholder="Email Address*" value="{{$customer_data['email']}}" name="email" required >
                                </div>                             
                              </div>
                              <div class="col-md-4">
@@ -40,7 +40,7 @@
                            <div class="row">
                              <div class="col-md-12">
                                <div class="aa-checkout-single-bill">
-                                 <textarea cols="8" rows="3" name="name" required >{{$customer_data['address']}} </textarea>
+                                 <textarea cols="8" rows="3" name="address" required >{{$customer_data['address']}} </textarea>
                                </div>                             
                              </div>                            
                            </div>   
@@ -119,11 +119,12 @@
                   </div>
                    <h4>Payment Method</h4>
                    <div class="aa-payment-method">                    
-                     <label for="cashdelivery"><input type="radio" id="cashdelivery" name="optionsRadios"> Cash on Delivery </label>
-                     <label for="paypal"><input type="radio" id="paypal" name="optionsRadios" checked> Via Paypal </label>
-                     <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">    
-                     <input type="submit" value="Place Order" class="aa-browse-btn">                
+                     <label for="cashdelivery">
+                      <input type="radio" id="cod" name="payment_type" checked value="COD" > Cash on Delivery </label>
+                     <label for="paypal"><input type="radio" id="instamojo" name="payment_type" value="Gateway" > Via Paypal </label>
+                     <input type="submit" value="Place Order" id="plade_order" class="aa-browse-btn">                
                    </div>
+                   <div id="order_place_msg" style="color: red; font-size: 13px" ></div>
                  </div>
                </div>
              </div>

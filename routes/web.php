@@ -146,5 +146,7 @@ Route::post('forgot_password_process',[FrontController::class,'forgot_password_p
 Route::get('checkout',[FrontController::class,'checkout']);
 Route::post('apply_coupon_code',[FrontController::class,'apply_coupon_code']);
 Route::post('remove_coupon_code',[FrontController::class,'remove_coupon_code']);
+Route::post('place_order_detail',[FrontController::class,'place_order_detail']);
+Route::get('order_place',[FrontController::class,'order_place']);
 
 //From End Route Set End

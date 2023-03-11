@@ -583,6 +583,7 @@ function add_to_cart(id){
     function applycouponcode(){
       var coupon_code = jQuery('#coupon_code').val();
       jQuery('#coupon_code_msg').html('');
+      jQuery('#order_place_msg').html('');
       jQuery('.coupon_code_box').addClass('hide');
       jQuery('#coupon_code_show').html('');
       if(coupon_code != ''){
@@ -596,7 +597,7 @@ function add_to_cart(id){
                   jQuery('.coupon_code_box').removeClass('hide');
                   jQuery('#coupon_code_show').html(coupon_code);
                   jQuery('#coupon_code_msg').html(result.msg);
-                  jQuery('#show_total_price').html(result.amount);
+                  jQuery('#show_total_price').html('₹ '+result.amount);
                   jQuery('.apply_coupon_code').hide();
               }else{
                   jQuery('#coupon_code_msg').html(result.msg);
@@ -624,7 +625,7 @@ function add_to_cart(id){
               if(result.status == 'success'){
                   jQuery('.coupon_code_box').addClass('hide');
                   jQuery('#coupon_code_msg').html(result.msg);
-                  jQuery('#show_total_price').html(result.amount);
+                  jQuery('#show_total_price').html('₹ '+result.amount);
                   jQuery('.apply_coupon_code').show();
               }else{
                   jQuery('#coupon_code_msg').html(result.msg);
@@ -633,3 +634,24 @@ function add_to_cart(id){
            })
       }
     }
+
+
+    jQuery('#placeOrderfrm').submit(function(e){
+      jQuery('#order_place_msg').html('Please Wait...');
+      e.preventDefault();
+      jQuery.ajax({
+        url:'/place_order_detail',
+        data:jQuery("#placeOrderfrm").serialize(),
+        type:'POST',
+        success:function(result){
+          if(result.status == 'success'){
+            window.location.href="/order_place";
+        }
+
+      jQuery('#order_place_msg').html('Please Wait...');
+
+        }
+      });
+    })
+
+    

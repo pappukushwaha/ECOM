@@ -1671,3 +1671,21 @@
   }
 
 })(jQuery);
+
+
+ function payment_status(id){
+  var payment_status = jQuery('#payment_status').val();
+  var check = confirm('You Are Sure');
+  if(check == true){
+    window.location.href = '/admin_login/payment_status_update/'+payment_status+'/'+id;
+  }
+ }
+
+
+ function order_status(id){
+  var order_status = jQuery('#order_status').val();
+  var check = confirm('You Are Sure');
+  if(check == true){
+    window.location.href = '/admin_login/order_status_update/'+order_status+'/'+id;
+  }
+ }

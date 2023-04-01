@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\TaxsController;
 use App\Http\Controllers\Admin\HomeBannerController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CustomerController;
 use Illuminate\Support\Facades\Route;
 
@@ -113,7 +114,12 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::post('homeBanner_updatedata/{id}', [HomeBannerController::class, 'updatedata']);
     Route::get('homeBanner_delete/{id}', [HomeBannerController::class, 'delete']);
     Route::get('status_update_homeBanner/{status}/{homeBanner_id}', [HomeBannerController::class, 'status']);
-    
+
+    Route::get('order', [OrderController::class, 'index']);
+    Route::get('admin_login/order_detail/{id}', [OrderController::class, 'order_detail']);
+    Route::post('admin_login/order_detail/{id}', [OrderController::class, 'track_update']);
+    Route::get('admin_login/payment_status_update/{statu}/{id}', [OrderController::class, 'payment_status_update']);
+    Route::get('admin_login/order_status_update/{statu}/{id}', [OrderController::class, 'order_status_update']);
 });
 
 //Admin Route Set End 
@@ -148,5 +154,12 @@ Route::post('apply_coupon_code',[FrontController::class,'apply_coupon_code']);
 Route::post('remove_coupon_code',[FrontController::class,'remove_coupon_code']);
 Route::post('place_order_detail',[FrontController::class,'place_order_detail']);
 Route::get('order_place',[FrontController::class,'order_place']);
+Route::get('instamojo_submit',[FrontController::class,'instamojo_submit']);
+Route::get('order_fail',[FrontController::class,'order_fail']);
 
+
+Route::group(['middleware'=>'user_auth'], function(){
+    Route::get('/my_order',[FrontController::class,'my_order']);
+Route::get('order_detail/{id}',[FrontController::class,'order_detail']);
+});
 //From End Route Set End

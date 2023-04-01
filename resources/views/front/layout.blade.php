@@ -65,10 +65,10 @@
               <!-- / header top left -->
               <div class="aa-header-top-right">
                 <ul class="aa-head-top-nav-right">
-                  <li><a href="javascript:void(0)">My Account</a></li>
-                  
+                  @if (session()->has('FRONT_USER_LOGIN') != '')
+                  <li><a href="{{url('/my_order')}}">My Order</a></li>
+                  @endif
                   <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
-                  <li class="hidden-xs"><a href="javascript:void(0)">Checkout</a></li>
                   @if (session()->has('FRONT_USER_LOGIN'))
                   <li><a href="/user_logout" data-toggle="modal">Logout</a></li>
                   @else

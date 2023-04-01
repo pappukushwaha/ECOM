@@ -374,12 +374,6 @@ class FrontController extends Controller
 
             $query = DB::table('customers')->insert($arr);
             if($query){
-                $data=['name'=>$request->name, 'rand_id'=>$rand_id];
-                $user['to']=$request->email;
-                Mail::send('front.email_verification', $data, function($message) use ($user){
-                  $message->to($user['to']);
-                  $message->subject('Email Id Verification');
-                });
                 return response()->json(['status'=>'success', 'msg'=>'Registration Successfully. Please check your email id for verification']);
             }
         }
@@ -540,19 +534,58 @@ class FrontController extends Controller
 
     }
     public function place_order_detail(Request $request){
+        $payment_url = '';
+        $coupon_value=0; 
         if($request->session()->has('FRONT_USER_LOGIN')){
+
+        }else{
+            $valid = Validator::make($request->all(),[
+                'email'=>'required|email|unique:customers,email'
+            ]);
+            if(!$valid->passes()){
+                return response()->json(['status'=>'error', 
+                 'msg'=>"The email has already been taken"]);
+            }else{
+                $rand_id = rand(111111111, 999999999);
+                $arr=[
+                 "name"=>$request->name,
+                 "email"=>$request->email,
+                 "address"=>$request->address,
+                 "city"=>$request->city,
+                 "state"=>$request->state,
+                 "zip"=>$request->zip,
+                 "password"=>Crypt::encrypt($rand_id),
+                 "mobile"=>$request->mobile,
+                 "rand_id"=>$rand_id,
+                 "status"=>1,
+                 "is_verify"=>0,
+                 "created_at"=>date('Y-m-d h:i:s'),
+                 "updated_at"=>date('Y-m-d h:i:s'),
+                 "is_forgot"=>0
+                ];
+    
+              $user_id = DB::table('customers')->insertGetId($arr);
+              $request->session()->put('FRONT_USER_LOGIN', true);
+              $request->session()->put('FRONT_USER_NAME', $request->name);
+              $request->session()->put('FRONT_USER_ID', $user_id);
+              $getUserTempId = getUserTempId();
+              DB::table('cart')
+              ->where(['userid'=>$getUserTempId, 'usertype'=>'Not-Reg'])
+              ->update(['userid'=>$user_id, 'usertype'=>'Reg']);
+
+             
+            } 
+        }
             if($request->coupon_code != ''){
                 $arr=apply_coupon_code($request->coupon_code);
                 $arr = json_decode($arr, true);
-                $coupon_value=0; 
+                
                 if($arr['status']=='success'){
                     $coupon_value =$arr['coupon_code_value'];
                 }else{
                 return response()->json(['status'=>'false', 'msg'=>$arr['msg']]);
                 }
             }
-            
-
             $uid=$request->session()->get('FRONT_USER_ID');
             $totalPrice=0;
             $getAddToCartTotalItem = getAddToCartTotalItem();
@@ -589,6 +622,50 @@ class FrontController extends Controller
                     $productArr['qty']=$list->qty;
                     DB::table('order_details')->insert($productArr);
                   }
+
+                  if($request->payment_type== 'Gateway'){
+                    $final_amt = $totalPrice-$coupon_value;
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, 'https://test.instamojo.com/api/1.1/payment-requests/');
+                    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, 
+                    array("X-Api-Key:test_e8a270beba2f24254affaf8e1d9",
+                        "X-Auth-Token:test_76e8e287f4d14b8f330531d80ab"));
+                    $payload = Array(
+                    'purpose' => 'Buy Product',
+                    'amount' => $final_amt,
+                    'phone' => $request->mobile,
+                    'buyer_name' => $request->name,
+                    'redirect_url' => 'http://127.0.0.1:8000/instamojo_submit',
+                    'send_email' => true,
+                    'send_sms' => true,
+                    'email' => $request->email,
+                    'allow_repeated_payments' => true
+                    );
+
+                    curl_setopt($ch, CURLOPT_POST, true);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS,  http_build_query($payload));
+                    $response = curl_exec($ch);
+                    curl_close($ch);
+                    $response = json_decode($response);
+                    if(isset($response->payment_request->id)){
+                        $tnx_id = $response->payment_request->id;
+                        DB::table('orders')
+                        ->where(['id'=>$order_id])
+                        ->update(['tnx_id'=>$tnx_id]);
+                        $payment_url = $response->payment_request->longurl;
+                    }else{
+                        $msg ='';
+                        foreach($response->message as $key=>$value){
+                            $msg .= $key.": ".$value[0].'<br />';
+                        } 
+                        return response()->json(['status'=>'error', 'msg'=>$msg, 'payment_url'=>'']);
+                    }
+                    
+                  }
                   DB::table('cart')->where(['userid'=>$uid, 'usertype'=>'Reg'])->delete();
                   $request->session()->put('ORDER_ID', $order_id);
 
@@ -598,11 +675,8 @@ class FrontController extends Controller
                 $status = 'false';
                 $msg='Please try after some time';
                }
-        }else{
-            $status = 'error';
-            $msg='Plase login to place order';
-        }
-        return response()->json(['status'=>$status, 'msg'=>$msg]);
+        
+        return response()->json(['status'=>$status, 'msg'=>$msg, 'payment_url'=>$payment_url]);
     }
     public function order_place(Request $request){
        if($request->session()->has('ORDER_ID')){
@@ -611,6 +685,54 @@ class FrontController extends Controller
         return redirect('/');
        }
     }
+
+    public function instamojo_submit(Request $request){
+       if($request->get('payment_id')!==null && $request->get('payment_status')!==null && $request->get('payment_request_id')!==null){
+          if ($request->get('payment_status') == 'Credit') {
+             $p_status ='Success'; 
+             $redirect_url = '/order_place';
+          } else {
+            $p_status ='Fail'; 
+            $redirect_url = '/order_fail';
+          }
+
+          $request->session()->put('ORDER_STATUS', $p_status);
+          DB::table('orders')
+          ->where(['tnx_id'=>$request->get('payment_request_id')])
+          ->update(['payment_status'=>$p_status,'payment_id'=>$request->get('payment_id')]);
+          return redirect($redirect_url);
+       }else{
+           die('Somethig went wrong');
+       }
+    }
+   
+    public function my_order(Request $request){
+         $result['orders']= DB::table('orders')
+         ->select('orders.*', 'order_status.order_status')
+         ->leftjoin('order_status', 'order_status.id', '=', 'orders.order_status')
+         ->where(['customers_id' =>$request->session()->get('FRONT_USER_ID')])
+         ->get();
+        return view('front.order', $result);
+    }
+
+    public function order_detail(Request $request, $id){
+        $result['order_details']= DB::table('order_details')
+        ->select('orders.*', 'order_details.price', 'order_details.qty', 'products.name as pname', 'product_attr.att_image', 'sizes.size', 'colores.color', 'order_status.order_status')
+        ->leftjoin('orders', 'orders.id', '=', 'order_details.orders_id')
+        ->leftjoin('product_attr', 'product_attr.id', '=', 'order_details.product_attr_id')
+        ->leftjoin('products', 'products.id', '=', 'product_attr.product_id')
+        ->leftJoin('sizes','sizes.id','=','product_attr.size_id')
+        ->leftJoin('colores','colores.id','=','product_attr.color_id')
+        ->leftjoin('order_status', 'order_status.id', '=', 'orders.order_status')
+        ->where(['orders.id' =>$id])
+        ->where(['orders.customers_id' =>$request->session()->get('FRONT_USER_ID')])
+        ->get();
+       if(!isset($result['order_details'][0])){
+        return redirect('/');
+       }
+        return view('front.order_detail', $result);
+
+   }
     
 }
 

@@ -645,10 +645,14 @@ function add_to_cart(id){
         type:'POST',
         success:function(result){
           if(result.status == 'success'){
-            window.location.href="/order_place";
+            if(result.payment_url != ''){
+              window.location.href=result.payment_url;
+            }else{
+              window.location.href="/order_place";
+            }
         }
-
       jQuery('#order_place_msg').html('Please Wait...');
+      jQuery('#order_place_msg').html(result.msg);
 
         }
       });

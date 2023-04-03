@@ -110,4 +110,23 @@ function apply_coupon_code($coupon_code){
 
 }
 
+
+ function getCustomDate($date){
+    if($date!=''){
+        $date = strtotime($date);
+        return date('d-M Y', $date);
+    }
+ }
+
+ function getAvailableQty($product_id, $attr_id){
+    $result = DB::table('order_details')
+    ->leftjoin('orders', 'orders.id', '=','order_details.orders_id')
+    ->leftjoin('product_attr', 'product_attr.id', '=', 'order_details.product_attr_id')
+    ->where(['order_details.product_id'=>$product_id])
+    ->where(['order_details.product_attr_id'=>$attr_id])
+    ->select('order_details.qty', 'product_attr.qty as pqty')
+    ->get();
+    return $result;
+ }
+
 ?>

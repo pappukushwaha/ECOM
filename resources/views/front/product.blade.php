@@ -59,7 +59,7 @@
                       <span class="aa-product-view-price">Rs {{$product_attr[$product[0]->id][0]->price}}&nbsp;&nbsp;</span>
                       <span class="aa-product-view-price"><del>Rs {{$product_attr[$product[0]->id][0]->mrp}}</del></span>
 
-                      <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
+                      <p class="aa-product-avilability">Avilability: <span class="instock">In stock</span></p>
 
                        @if($product[0]->leed_time!='')
                        <p class="leed_time">
@@ -154,57 +154,56 @@
                 </div>
                 <div class="tab-pane fade " id="review">
                  <div class="aa-product-review-area">
-                   <h4>2 Reviews for T-Shirt</h4> 
-                   <ul class="aa-review-nav">
-
-                     <li>
-                        <div class="media">
-                          <div class="media-left">
-                            <a href="#">
-                              <img class="media-object" src="img/testimonial-img-3.jpg" alt="girl image">
-                            </a>
+                  @if (isset($product_review[0]))
+                  <h4>
+                  @php
+                      echo count($product_review);
+                  @endphp
+                    Reviews for {{$product[0]->name}}</h4> 
+                  <ul class="aa-review-nav">
+                    @foreach ($product_review as $item)
+                    <li>
+                      <div class="media">
+                        <div class="media-body">
+                          <h4 class="media-heading"><strong>{{$item->name}}</strong> - <span>{{getCustomDate($item->added_on)}}</span></h4>
+                          <div class="aa-product-rating">
+                           <span>{{$item->rating}}</span>
                           </div>
-                          <div class="media-body">
-                            <h4 class="media-heading"><strong>Marla Jobs</strong> - <span>March 26, 2016</span></h4>
-                            <div class="aa-product-rating">
-                              <span class="fa fa-star"></span>
-                              <span class="fa fa-star"></span>
-                              <span class="fa fa-star"></span>
-                              <span class="fa fa-star"></span>
-                              <span class="fa fa-star-o"></span>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                          </div>
+                          <p>{{$item->review}}</p>
                         </div>
-                      </li>
-                      
-                   </ul>
+                      </div>
+                    </li>
+                    @endforeach
+                    
+                  </ul>
+                  @else
+                      <h2>No Review Available</h2>
+                  @endif
+                  
                    <h4>Add a review</h4>
-                   <div class="aa-your-rating">
-                     <p>Your Rating</p>
-                     <a href="#"><span class="fa fa-star-o"></span></a>
-                     <a href="#"><span class="fa fa-star-o"></span></a>
-                     <a href="#"><span class="fa fa-star-o"></span></a>
-                     <a href="#"><span class="fa fa-star-o"></span></a>
-                     <a href="#"><span class="fa fa-star-o"></span></a>
-                   </div>
+                   
                    <!-- review form -->
-                   <form action="" class="aa-review-form">
+                   <form action="" id="productfrmreview" class="aa-review-form">
+                    @csrf
+                    <div class="form-group">
+                      <label for="message">Your Rating</label>
+                      <select name="rating" id="" class="form-control" required>
+                        <option >Select Rating</option>
+                        <option value="Worst">Worst</option>
+                        <option value="Bad">Bad</option>
+                        <option value="Good">Good</option>
+                        <option value="Very Good">Very Good</option>
+                        <option value="Fantastic">Fantastic</option>
+                      </select>
+                    </div>
                       <div class="form-group">
                         <label for="message">Your Review</label>
-                        <textarea class="form-control" rows="3" id="message"></textarea>
+                        <textarea name="review" class="form-control" rows="3" id="message" required></textarea>
                       </div>
-                      <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" placeholder="Name">
-                      </div>  
-                      <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="example@gmail.com">
-                      </div>
-
+                      <input type="hidden" name="product_id" value="{{$product[0]->id}}">
                       <button type="submit" class="btn btn-default aa-review-submit">Submit</button>
                    </form>
+                   <div class="review_msg" style="color: red; font-size: 17px"></div>
                  </div>
                 </div>            
               </div>

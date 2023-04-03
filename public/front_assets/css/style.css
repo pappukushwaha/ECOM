@@ -662,6 +662,7 @@ img {
   color: #fff;
   font-size: 16px;
   padding: 10px 15px;
+  text-transform: capitalize;
   -webkit-transition: all 0.5s;
   -moz-transition: all 0.5s;
   -ms-transition: all 0.5s;
@@ -927,15 +928,13 @@ img {
   background-color: #ddd;
 }
 #aa-promo .aa-promo-area .aa-promo-right {
-  display: inline;
-  float: left;
   width: 100%;
-  height: 400px;
+  height: 100%;
 }
 #aa-promo .aa-promo-area .aa-promo-right .aa-single-promo-right {
-  width: 50%;
-  height: 50%;
-  float: left;
+  width: 20%;
+  height: 20%;
+  /* float: left; */
 }
 #aa-promo .aa-promo-area .aa-promo-banner {
   width: 100%;
@@ -969,8 +968,8 @@ img {
   transition: all 0.3s ease-out;
 }
 #aa-promo .aa-promo-area .aa-promo-banner:hover img {
-  height: 120%;
-  width: 120%;
+  height: 100%;
+  width: 100%;
   margin-left: -10%;
   margin-top: -10%;
 }
@@ -984,6 +983,7 @@ img {
 #aa-promo .aa-promo-area .aa-promo-banner img {
   width: 100%;
   height: 100%;
+  object-fit: contain;
   -webkit-transition: all 0.5s;
   -moz-transition: all 0.5s;
   -ms-transition: all 0.5s;

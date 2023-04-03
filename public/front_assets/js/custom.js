@@ -403,9 +403,14 @@ function add_to_cart(id){
     data:jQuery('#frmAddToCart').serialize(),
     type:'post',
     success: function(result){
-      alert('Product ' +result.msg);
+      
       totalprice = 0;
-      if(result.totalcart == 0){
+      if(result.msg =="not_availabel"){
+        alert('Product ' +result.data);
+        jQuery('.instock').html('Out Of Stock').css({"background-color":"red", "padding": "4px","border-radius":"3px","color": "#fff"});
+      }else{
+        alert('Product ' +result.msg);
+        if(result.totalcart == 0){
          jQuery('.aa-cart-notify').html('0');
          jQuery('.aa-cartbox-summary').remove();
       }else{
@@ -420,6 +425,9 @@ function add_to_cart(id){
       html +='</ul>';
       html +='<a class="aa-cartbox-checkout aa-primary-btn" href="cart">Cart</a>';
       jQuery('.aa-cartbox-summary').html(html);
+      }
+      
+      
     }
   });
  }
@@ -657,5 +665,33 @@ function add_to_cart(id){
         }
       });
     })
+
+
+
+    jQuery('#productfrmreview').submit(function(e){
+      e.preventDefault();
+      jQuery.ajax({
+        url:'/product_review',
+        data:jQuery("#productfrmreview").serialize(),
+        type:'POST',
+        success:function(result){
+          console.log(result);
+          if(result.status == 'success'){
+            jQuery('.review_msg').html(result.msg)
+            setInterval(function(){
+              window.location.href=window.location.href;
+            }, 3000);
+        
+          }
+          if(result.status == 'erorr'){
+            jQuery('.review_msg').html(result.msg)
+          }
+
+        }
+      });
+    })
+
+
+
 
     

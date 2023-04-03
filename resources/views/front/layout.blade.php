@@ -58,7 +58,7 @@
                 
                 <!-- start cellphone -->
                 <div class="cellphone hidden-xs">
-                  <p><span class="fa fa-phone"></span>00-62-658-658</p>
+                  <p><span class="fa fa-phone"></span>+91 9137640812</p>
                 </div>
                 <!-- / cellphone -->
               </div>
@@ -94,7 +94,7 @@
                 <!-- Text based logo -->
                 <a href="{{url('/')}}">
                   <span class="fa fa-shopping-cart"></span>
-                  <p>daily<strong>Shop</strong> <span>Your Shopping Partner</span></p>
+                  <p>Pappu<strong>Kush</strong> <span>Your Shopping Partner</span></p>
                 </a>
                 <!-- img based logo -->
                 <!-- <a href="javascript:void(0)"><img src="img/logo.jpg" alt="logo img"></a> -->
@@ -242,15 +242,15 @@
                   <div class="aa-footer-widget">
                     <h3>Contact Us</h3>
                     <address>
-                      <p> 25 Astor Pl, NY 10003, USA</p>
-                      <p><span class="fa fa-phone"></span>+1 212-982-4589</p>
-                      <p><span class="fa fa-envelope"></span>dailyshop@gmail.com</p>
+                      <p> Rohini Delhi, 110431, India</p>
+                      <p><span class="fa fa-phone"></span>+91 9137640812</p>
+                      <p><span class="fa fa-envelope"></span>kushwahapappu730@gmail.com</p>
                     </address>
                     <div class="aa-footer-social">
                       <a href="#"><span class="fa fa-facebook"></span></a>
                       <a href="#"><span class="fa fa-twitter"></span></a>
-                      <a href="#"><span class="fa fa-google-plus"></span></a>
-                      <a href="#"><span class="fa fa-youtube"></span></a>
+                      <a href="#"><span class="fa fa-instagram"></span></a>
+                      <a href="#"><span class="fa fa-linkedin"></span></a>
                     </div>
                   </div>
                 </div>
@@ -267,7 +267,7 @@
         <div class="row">
         <div class="col-md-12">
           <div class="aa-footer-bottom-area">
-            <p>Designed by <a href="http://www.markups.io/">MarkUps.io</a></p>
+            <p>Designed by Pappu Kushwaha <a href="http://pappukush.netlify.app/" style="text-decoration: underline" target="_blank"> Check Now</a></p>
             <div class="aa-footer-payment">
               <span class="fa fa-cc-mastercard"></span>
               <span class="fa fa-cc-visa"></span>

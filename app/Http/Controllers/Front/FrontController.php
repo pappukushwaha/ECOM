@@ -216,7 +216,15 @@ class FrontController extends Controller
                 ->where(['product_attr.product_id'=>$list1->id])
                 ->get();
         }
-        
+
+        $result['product_review']=
+            DB::table('product_review')
+            ->leftJoin('customers','customers.id','=','product_review.customer_id')
+            ->where(['product_review.status'=>1])
+            ->where(['product_review.product_id'=>$result['product'][0]->id])
+            ->orderBy('product_review.added_on', 'desc')
+            ->select('product_review.rating', 'product_review.review', 'product_review.added_on', 'customers.name')
+            ->get();
         return view('front.product',$result);
     }
 
@@ -244,8 +252,14 @@ class FrontController extends Controller
             ->where(['colores.color'=>$color_id])
             ->get();
         $product_attr_id=$result[0]->id;
-
-
+        
+        $getAvailableQty=getAvailableQty($product_id, $product_attr_id);
+        $finalAvailable = $getAvailableQty[0]->pqty-$getAvailableQty[0]->qty;
+        if($pqty>$finalAvailable){
+        return response()->json(['msg'=>"not_availabel",'data'=>"Only $finalAvailable Left"]);
+            
+        }
+        
         $check=DB::table('cart')
             ->where(['userid'=>$uid])
             ->where(['usertype'=>$usertype])
@@ -732,6 +746,30 @@ class FrontController extends Controller
        }
         return view('front.order_detail', $result);
 
+   }
+
+   public function product_review(Request $request){
+    if($request->session()->has('FRONT_USER_LOGIN')){
+        $uid=$request->session()->get('FRONT_USER_ID');
+       
+        $arr=[
+            "customer_id"=>$uid,
+            "rating"=>$request->rating,
+            "review"=>$request->review,
+            "status"=>1,
+            "product_id"=>$request->product_id,
+            "added_on"=>date('Y-m-d h:i:s'),
+           ];
+
+        DB::table('product_review')->insert($arr);
+        $status = "success";
+        $msg = "Thank you for providing your review";
+    }else{
+        $status = "error";
+        $msg = "Please login to submit your review";
+    }
+
+    return response()->json(['status'=>$status, 'msg'=>$msg]);
    }
     
 }

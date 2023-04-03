@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\TaxsController;
 use App\Http\Controllers\Admin\HomeBannerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\ProductReviews;
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Front\FrontController;
@@ -120,6 +122,14 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::post('admin_login/order_detail/{id}', [OrderController::class, 'track_update']);
     Route::get('admin_login/payment_status_update/{statu}/{id}', [OrderController::class, 'payment_status_update']);
     Route::get('admin_login/order_status_update/{statu}/{id}', [OrderController::class, 'order_status_update']);
+
+
+    Route::get('product_review', [ProductReviews::class, 'index']);
+    Route::get('product_review_update/{status}/{id}', [ProductReviews::class, 'product_review_update']);
+
+
+
+    
 });
 
 //Admin Route Set End 
@@ -161,5 +171,6 @@ Route::get('order_fail',[FrontController::class,'order_fail']);
 Route::group(['middleware'=>'user_auth'], function(){
     Route::get('/my_order',[FrontController::class,'my_order']);
 Route::get('order_detail/{id}',[FrontController::class,'order_detail']);
+Route::post('product_review',[FrontController::class,'product_review']);
 });
 //From End Route Set End

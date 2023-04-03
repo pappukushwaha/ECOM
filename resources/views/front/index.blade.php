@@ -39,9 +39,9 @@
           <div class="aa-promo-area">
             <div class="row">
               <div class="col-md-12 no-padding">
-                <div class="aa-promo-right">
+                <div class="aa-promo-right row">
                   @foreach($home_categories as $list)
-                  <div class="aa-single-promo-right">
+                  <div class="aa-single-promo-right col-md-4">
                     <div class="aa-promo-banner">                      
                       <img src="{{asset('storage/media/'.$list->category_image)}}" alt="img">                      
                       <div class="aa-prom-content">
@@ -50,6 +50,7 @@
                     </div>
                   </div>
                   @endforeach
+                  
                 </div>
               </div>
             </div>
@@ -59,6 +60,19 @@
     </div>
   </section>
   <!-- / Promo section -->
+  <section id="aa-banner">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">        
+          <div class="row">
+            <div class="aa-banner-area">
+            <a href="#"><img src="{{asset('front_assets/img/banner1.jpg')}}" alt="fashion banner img"></a>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   <!-- Products section -->
   <section id="aa-product">
     <div class="container">
@@ -128,7 +142,7 @@
         <div class="col-md-12">        
           <div class="row">
             <div class="aa-banner-area">
-            <a href="#"><img src="{{asset('front_assets/img/fashion-banner.jpg')}}" alt="fashion banner img"></a>
+            <a href="#"><img src="{{asset('front_assets/img/banner.jpg')}}" alt="fashion banner img"></a>
           </div>
           </div>
         </div>
